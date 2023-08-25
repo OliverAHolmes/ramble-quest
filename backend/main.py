@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
 from db import init_db
-from routes import api
+from routes import router
 
 init_db()
 
 app = FastAPI()
-app.include_router(api)
+app.include_router(router)
