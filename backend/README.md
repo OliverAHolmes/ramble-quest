@@ -8,95 +8,67 @@ using [SQLAlchemy](https://docs.sqlalchemy.org/en/20/) for working with an in-me
 The following are must be installed to run the backend:
 
 - Python 3.11
-- virtualenv
+- pipenv (pip3 install pipenv)
 
 ## Project Commands
 
-### 1. **Project in Development Mode:**
+### Project Setup
 
-### 2. **Run the Project in Development Mode:**
-
-To start the Uvicorn server in development mode:
-
+ * **Install dependancies:**
+  
 ```bash
+
+make install
+
+```
+
+ * **Activate Environment:**
+  
+```bash
+
+make activate
+
+```
+
+### Run Uvicorn Server
+
+ * **To start the Uvicorn server in development mode:**
+  
+```bash
+
 make run
+
 ```
 
-This command sets the environment to `development` and runs:
-
+ * **Remove the database and start the Uvicorn server in development mode:**
+  
 ```bash
-export ENV=development && uvicorn main:app --reload --host 0.0.0.0
-```
 
-### 3. **Clean and Run in Development Mode:**
-
-This command deletes the `database.db` file and then starts the Uvicorn server in development mode:
-
-```bash
 make clean-run
+
 ```
 
-Executed commands:
 
+### Generate Requirements
+
+* **Generate the requirements for the project:**
+  
 ```bash
-export ENV=development && rm -f database.db && uvicorn main:app --reload --host 0.0.0.0
-```
 
-### 4. **Generate Requirements.txt:**
-
-To produce a `requirements.txt` file from the Pipenv environment:
-
-```bash
 make generate_requirements_txt
+
 ```
 
-The command used is:
+### Test The Project
 
-```bash
-pipenv requirements --dev > requirements.txt
-```
-
-### 5. **Run Tests:**
-
-For testing:
-
+* **Run local tests:**
+  
 ```bash
 make test
 ```
 
-This command deletes the `test.db`, sets the environment to `testing`, and then runs pytest:
-
-```bash
-rm -f test.db
-export ENV=testing && pytest tests -x -vv
-```
-
-### 6. **Get Test Coverage :**
-
-For testing:
-
+* **Get test coverage:**
+  
 ```bash
 make test-coverage
 ```
-
-This command deletes the `test.db`, sets the environment to `testing`, and then gets the test coverage of the project:
-
-```bash
-rm -f test.db
-export ENV=testing && pytest tests -x -vv --cov=. --cov-report=term-missing
-```
-
-### 7. **Install Project Dependencies:**
-
-To set up the project's dependencies:
-
-```bash
-make install
-```
-
-This corresponds to:
-
-```bash
-pipenv install --dev
-```
-
