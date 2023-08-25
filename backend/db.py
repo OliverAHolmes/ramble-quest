@@ -1,15 +1,24 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+import os
+from sqlmodel import create_engine, SQLModel
 from sqlalchemy.orm import sessionmaker
+from config import settings
 
-engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+
+SQLALCHEMY_DATABASE_URL = f"sqlite:///{settings.db_path}"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
 
 
-def init_db():
-    Base.metadata.create_all(bind=engine)
+def create_db():
+    if settings.ENV == "testing" and os.path.exists(settings.db_path):
+        os.remove(settings.db_path)
 
+    if not os.path.exists(settings.db_path):
+        SQLModel.metadata.create_all(engine)
+"type"
 
 def get_db():
     db = SessionLocal()

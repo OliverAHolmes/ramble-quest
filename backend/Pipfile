@@ -8,6 +8,7 @@ fastapi = "*"
 sqlmodel = "*"
 uvicorn = "*"
 pydantic = "*"
+python-multipart = "*"
 
 [dev-packages]
 black = "*"

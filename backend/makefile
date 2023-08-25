@@ -11,12 +11,12 @@ generate_requirements_txt:
 	pipenv requirements --dev  > requirements.txt
 
 test:
-	rm -f test.db
 	export ENV=testing && pytest tests -x -vv
+	rm -f test.db
 
 test-coverage:
-	rm -f test.db
 	export ENV=testing && pytest tests -x -vv --cov=. --cov-report=term-missing
+	rm -f test.db
 
 install:
 	pipenv install --dev
