@@ -1,10 +1,15 @@
+"""
+This module defines models and utility functions for handling geographic features.
+"""
 from typing import Optional
-from sqlmodel import Field, SQLModel, Column, JSON
 from datetime import datetime as dt
+from sqlmodel import Field, SQLModel, Column, JSON
 
 
 class Feature(SQLModel, table=True):
-    __tablename__ = 'feature'
+    """Represents a geographic feature stored in the database."""
+
+    __tablename__ = "feature"
     id: Optional[int] = Field(default=None, primary_key=True, index=True)
     features: dict = Field(
         sa_column=Column(JSON),
