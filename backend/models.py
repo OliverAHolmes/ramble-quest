@@ -11,6 +11,9 @@ class Feature(SQLModel, table=True):
 
     __tablename__ = "feature"
     id: Optional[int] = Field(default=None, primary_key=True, index=True)
+    feature_name: str = Field(
+        description="Name of feature, from the file name.",
+    )
     features: dict = Field(
         sa_column=Column(JSON),
         description="GeoJson Feature object.",

@@ -11,7 +11,7 @@ generate_requirements_txt:
 	pipenv requirements --dev  > requirements.txt
 
 test:
-	export ENV=testing && pytest tests -x -vv
+	export ENV=testing && pytest tests -s -x -vv
 	rm -f test.db
 
 test-coverage:
