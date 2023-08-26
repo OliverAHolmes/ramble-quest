@@ -1,7 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { store } from "../redux/store";
+import { setUploadGeoJsonVisable } from "../redux/panelsSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
 
-const ModalComponent = () => {
-  const [isOpen, setIsOpen] = useState(true);
+const UploadModal = () => {
+  const dispatch = useDispatch();
+  const state = store.getState();
+  const panelVisable = useSelector((state: RootState) => state.panels.uploadGeoJson.visible );
+  const [isOpen, setIsOpen] = useState(panelVisable);
+
+
+  useEffect(() => {
+    setIsOpen(panelVisable);
+  }, [panelVisable]);
+
+  const handleCancelButtClick = () => {
+    dispatch(setUploadGeoJsonVisable(false));
+  };
+
+  const handleTextUpdate = (e: any) => {
+    console.log(e.target.value);
+  };
 
   return (
     <div className="relative flex justify-center">
@@ -17,7 +37,7 @@ const ModalComponent = () => {
               <div className="flex items-center justify-center mx-auto">
                 <img
                   className="h-full rounded-lg"
-                  src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+                  src="./imgs/geojson.png"
                   alt=""
                 />
               </div>
@@ -27,7 +47,7 @@ const ModalComponent = () => {
                   className="text-lg font-medium text-gray-800 dark:text-white"
                   id="modal-title"
                 >
-                  Uplaod a GeoJSON file
+                  GeoJSON Upload
                 </h3>
 
                 <p className="mt-2 text-gray-500 dark:text-gray-400">
@@ -40,6 +60,7 @@ const ModalComponent = () => {
                   type="text"
                   value="https://merakiui.com/project"
                   className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                  onChange={(e) => handleTextUpdate}
                 />
 
                 <button className="rounded-md hidden sm:block p-1.5 text-gray-700 bg-white border border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring transition-colors duration-300 hover:text-blue-500 dark:hover:text-blue-500">
@@ -49,14 +70,14 @@ const ModalComponent = () => {
 
               <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleCancelButtClick}
                   className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
                 >
                   Cancel
                 </button>
 
                 <button className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                  Confirm
+                  Upload
                 </button>
               </div>
             </div>
@@ -67,4 +88,4 @@ const ModalComponent = () => {
   );
 };
 
-export default ModalComponent;
+export default UploadModal;

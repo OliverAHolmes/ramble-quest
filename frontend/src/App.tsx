@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import Map from './Components/Map';
-import Navbar from './Components/Navbar';
-import ModalComponent from './Components/ModalComponent';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import Map from "./Components/Map";
+import Navbar from "./Components/Navbar";
+import UploadModal from "./Components/UploadModal";
+import LayersModal from "./Components/LayersModal";
+import "./App.css";
 
 function App() {
   // const [greeting, setGreeting] = useState<string>();
@@ -15,10 +16,10 @@ function App() {
 
   return (
     <div className="App">
-      
       <Navbar />
       <Map />
-      <ModalComponent />
+      <UploadModal />
+      {/* <LayersModal /> */}
     </div>
   );
 }

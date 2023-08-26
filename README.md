@@ -19,6 +19,9 @@ To create an FastAPI that allows users to upload a GeoJson file and then view it
 * SQLite
 * React implemented in TypeScript
 * MapBox GL JS
+* Tailwind
 
+## Additional features
 
-Detects and Adjusts for system Light/Dark mode.
+* Detects and Adjusts for system Light/Dark mode.
+* Mobile responsive.
