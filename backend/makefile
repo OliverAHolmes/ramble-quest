@@ -20,3 +20,9 @@ test-coverage:
 
 install:
 	pipenv install --dev
+
+format:
+	black . 
+
+lint:
+	pylint *.py

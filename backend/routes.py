@@ -1,9 +1,10 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 import json
 from db import SessionLocal
-from models import Feature 
+from models import Feature
 
 router = APIRouter(prefix="/features")
+
 
 @router.post("/upload/")
 async def upload_geojson(file: UploadFile = File(...)):
@@ -16,15 +17,18 @@ async def upload_geojson(file: UploadFile = File(...)):
 
     # Initialize database session
     db = SessionLocal()
-    
+
     feature_type = geojson_dict.get("type", "Unknown")
-    db_feature = Feature(features=geojson_dict, feature_type=feature_type, feature_name=feature_name)
+    db_feature = Feature(
+        features=geojson_dict, feature_type=feature_type, feature_name=feature_name
+    )
     db.add(db_feature)
-    
+
     db.commit()
     db.close()
 
     return {"message": "GeoJSON features saved to SQLite"}
+
 
 @router.get("/")
 async def get_all_features():
@@ -33,6 +37,7 @@ async def get_all_features():
     db_features = db.query(Feature).all()
     db.close()
     return db_features
+
 
 @router.get("/{feature_id}")
 async def get_feature_by_id(feature_id: int):
@@ -44,6 +49,7 @@ async def get_feature_by_id(feature_id: int):
         raise HTTPException(status_code=404, detail="Feature not found")
 
     return db_feature
+
 
 @router.delete("/delete/{feature_id}")
 async def delete_feature_by_id(feature_id: int):

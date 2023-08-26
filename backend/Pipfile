@@ -9,6 +9,7 @@ sqlmodel = "*"
 uvicorn = "*"
 pydantic = "*"
 python-multipart = "*"
+pylint = "*"
 
 [dev-packages]
 black = "*"

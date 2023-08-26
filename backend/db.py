@@ -18,7 +18,10 @@ def create_db():
 
     if not os.path.exists(settings.db_path):
         SQLModel.metadata.create_all(engine)
+
+
 "type"
+
 
 def get_db():
     db = SessionLocal()

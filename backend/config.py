@@ -1,3 +1,4 @@
+# Configuration file for the backend
 from pydantic import BaseSettings
 
 
