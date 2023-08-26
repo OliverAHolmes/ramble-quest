@@ -1,0 +1,7 @@
+.greeting {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 100;
+    text-shadow: 1px 1px 3px #fff;
+}
