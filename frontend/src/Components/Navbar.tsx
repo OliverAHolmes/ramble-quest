@@ -6,23 +6,18 @@ import { useSelector, useDispatch } from "react-redux";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const uploadGeoJsonVisable = useSelector(
-    (state: RootState) => state.panels.uploadGeoJson.visible
-  );
   const layerListVisable = useSelector(
     (state: RootState) => state.panels.layerList.visible
   );
 
   const handleUploadButtClick = () => {
-    console.log("Upload button clicked");
     dispatch(setUploadGeoJsonVisable(true));
-    console.log(uploadGeoJsonVisable);
+    setIsOpen(false);
   };
 
   const handleLayersButtClick = () => {
-    console.log("Layers button clicked");
     dispatch(setLayerListVisable(!layerListVisable));
-    console.log(layerListVisable);
+    setIsOpen(false);
   };
 
   return (

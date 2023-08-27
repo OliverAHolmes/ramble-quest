@@ -14,43 +14,6 @@ const Map: React.FC = () => {
 
   const layers = useSelector((state: RootState) => state.layers.layers);
   const slecetedLayerId = useSelector((state: RootState) => state.layers.selectedLayerId);
-  // const [tableData, setTableData] = useState<TableDataItem[]>([]);
-
-  // useEffect(() => {
-  //   if (!map.current) return;
-
-  //   if(map.current){
-      
-  //   }
-  //   layers.layers.forEach((layer) => {
-
-  //     console.log(layer);
-  //     const layerId = `layer-${layer.id}`;
-
-  //     // Remove layer if it already exists
-  //     if (map.current?.getLayer(layerId)) {
-  //       map.current?.removeLayer(layerId);
-  //       map.current?.removeSource(layerId);
-
-  //     }
-
-  //     // Add new layer
-  //     map.current?.addSource(layerId, {
-  //       type: 'geojson',
-  //       data: layer.feature as GeoJSON.FeatureCollection<GeoJSON.Geometry>,
-  //     });
-  //     map.current?.addLayer({
-  //       id: layerId,
-  //       type: 'fill', // You can change this based on what you need
-  //       source: layerId,
-  //       layout: {},
-  //       paint: {
-  //         'fill-color': '#0080ff', // You can customize this
-  //         'fill-opacity': 0.5,
-  //       },
-  //     });
-  //   });
-  // }, [layers]);
 
   useEffect(() => {
     if (!mapContainer.current) return; // wait for map container to be loaded
@@ -70,13 +33,6 @@ const Map: React.FC = () => {
 
           const layerId = `layer-${layer.id}`;
     
-          // Remove layer if it already exists
-          // if (map.current?.getLayer(layerId)) {
-          //   map.current?.removeLayer(layerId);
-          //   map.current?.removeSource(layerId);
-    
-          // }
-    
           // Add new layer
           map.current?.addSource(layerId, {
             type: 'geojson',
@@ -88,7 +44,7 @@ const Map: React.FC = () => {
             source: layerId,
             layout: {},
             paint: {
-              'fill-color': '#0080ff', // You can customize this
+              'fill-color': (slecetedLayerId === layer.id) ? '#FF0000' : '#0080ff' , // You can customize this
               'fill-opacity': 0.5,
             },
           });
