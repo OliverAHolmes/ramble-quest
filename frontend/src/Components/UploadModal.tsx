@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { store } from "../redux/store";
 import { setUploadGeoJsonVisable } from "../redux/panelsSlice";
+import { updateLayerList } from "../redux/layersSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 
@@ -9,6 +10,7 @@ const UploadModal = () => {
   const state = store.getState();
   const panelVisable = useSelector((state: RootState) => state.panels.uploadGeoJson.visible );
   const [isOpen, setIsOpen] = useState(panelVisable);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 
   useEffect(() => {
@@ -21,6 +23,43 @@ const UploadModal = () => {
 
   const handleTextUpdate = (e: any) => {
     console.log(e.target.value);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      try {
+        const response = await fetch('features/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          console.log('File uploaded successfully');
+
+          fetch("/features")
+            .then((response) => response.json())
+            .then((data) => {
+              dispatch(updateLayerList(data));
+            });
+
+          dispatch(setUploadGeoJsonVisable(false));
+          
+        } else {
+          console.log('File upload failed', response);
+        }
+      } catch (error) {
+        console.error('There was a problem uploading the file', error);
+      }
+    }
   };
 
   return (
@@ -55,17 +94,18 @@ const UploadModal = () => {
                 </p>
               </div>
 
-              <div className="flex items-center justify-between w-full mt-5 gap-x-2">
+              <div className="flex items-center justify-between w-full mt-5 gap-x-2 ">
                 <input
-                  type="text"
-                  value="https://merakiui.com/project"
-                  className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-                  onChange={(e) => handleTextUpdate}
+                  type="file" onChange={handleFileChange} 
+                  className="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300  cursor-pointer"
+                  // onChange={(e) => handleTextUpdate}
                 />
-
-                <button className="rounded-md hidden sm:block p-1.5 text-gray-700 bg-white border border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring transition-colors duration-300 hover:text-blue-500 dark:hover:text-blue-500">
-                  {/* SVG Icon */}
-                </button>
+                {/* <input type="file" onChange={handleFileChange} /> */}
+                {/* <button 
+                onClick={handleUpload}
+                className="rounded-md hidden sm:block p-1.5 text-gray-700 bg-white border border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring transition-colors duration-300 hover:text-blue-500 dark:hover:text-blue-500">
+                Upload
+                </button> */}
               </div>
 
               <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
@@ -76,7 +116,9 @@ const UploadModal = () => {
                   Cancel
                 </button>
 
-                <button className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                <button 
+                onClick={handleUpload}
+                className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                   Upload
                 </button>
               </div>

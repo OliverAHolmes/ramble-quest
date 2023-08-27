@@ -25,7 +25,7 @@ const initialPanelsState: PanelsState = {
 };
 
 const panelsSlice = createSlice({
-  name: "settings",
+  name: "panels",
   initialState: initialPanelsState,
   reducers: {
     setUploadGeoJsonVisable: (state, action: PayloadAction<boolean>) => {

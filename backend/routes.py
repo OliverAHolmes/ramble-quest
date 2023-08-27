@@ -6,21 +6,21 @@ from models import Feature
 router = APIRouter(prefix="/features")
 
 
-@router.post("/upload/")
+@router.post("/upload")
 async def upload_geojson(file: UploadFile = File(...)):
     # Read and parse the GeoJSON file
     geojson_content = await file.read()
     geojson_dict = json.loads(geojson_content)
 
     # Get file name to set as feature_name
-    feature_name = file.filename
+    filename = file.filename
 
     # Initialize database session
     db = SessionLocal()
 
     feature_type = geojson_dict.get("type", "Unknown")
     db_feature = Feature(
-        features=geojson_dict, feature_type=feature_type, feature_name=feature_name
+        feature=geojson_dict, name=filename
     )
     db.add(db_feature)
 

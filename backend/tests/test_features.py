@@ -12,7 +12,7 @@ def test_upload_geojson():
     with open("data/InputMultipolygonExample_1.geojson", "rb") as f:
         # Perform the upload
         response = client.post(
-            "/features/upload/",
+            "/features/upload",
             files={
                 "file": ("InputMultipolygonExample_1.geojson", f, "application/json")
             },

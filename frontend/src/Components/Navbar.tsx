@@ -1,18 +1,28 @@
 import React, { useState } from "react";
-import { setUploadGeoJsonVisable } from "../redux/panelsSlice";
+import { setUploadGeoJsonVisable, setLayerListVisable } from "../redux/panelsSlice";
 import { RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const uploadGeoJsonVisable = useSelector((state: RootState) => state.panels.uploadGeoJson.visible );
-  
+  const uploadGeoJsonVisable = useSelector(
+    (state: RootState) => state.panels.uploadGeoJson.visible
+  );
+  const layerListVisable = useSelector(
+    (state: RootState) => state.panels.layerList.visible
+  );
 
   const handleUploadButtClick = () => {
     console.log("Upload button clicked");
     dispatch(setUploadGeoJsonVisable(true));
     console.log(uploadGeoJsonVisable);
+  };
+
+  const handleLayersButtClick = () => {
+    console.log("Layers button clicked");
+    dispatch(setLayerListVisable(!layerListVisable));
+    console.log(layerListVisable);
   };
 
   return (
@@ -57,7 +67,10 @@ const Navbar = () => {
           } absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center`}
         >
           <div className="flex flex-col md:flex-row md:mx-6">
-            <button className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-700 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
+            <button
+              onClick={handleLayersButtClick}
+              className={`flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 ${layerListVisable ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} dark:text-gray-300`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"

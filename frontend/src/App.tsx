@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Map from "./Components/Map";
 import Navbar from "./Components/Navbar";
 import UploadModal from "./Components/UploadModal";
-import LayersModal from "./Components/LayersModal";
+import Layers from "./Components/Layers";
 import "./App.css";
 
 function App() {
@@ -18,8 +18,8 @@ function App() {
     <div className="App">
       <Navbar />
       <Map />
+      <Layers />
       <UploadModal />
-      {/* <LayersModal /> */}
     </div>
   );
 }

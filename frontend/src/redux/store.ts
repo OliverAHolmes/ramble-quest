@@ -3,6 +3,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import panelsReducer from "./panelsSlice";
+import layersReducer from './layersSlice';
 
 const panelsPersistConfig = {
   key: "panels",
@@ -12,7 +13,8 @@ const panelsPersistConfig = {
 const panelsPersistedReducer = persistReducer(panelsPersistConfig, panelsReducer);
 
 const rootReducer = combineReducers({
-  panels: panelsPersistedReducer
+  panels: panelsPersistedReducer,
+  layers: layersReducer, 
 })
 
 export const store = configureStore({
