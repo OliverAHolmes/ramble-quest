@@ -3,19 +3,32 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import panelsReducer from "./panelsSlice";
-import layersReducer from './layersSlice';
+import layersReducer from "./layersListSlice";
 
 const panelsPersistConfig = {
   key: "panels",
   storage,
 };
 
-const panelsPersistedReducer = persistReducer(panelsPersistConfig, panelsReducer);
+const layersPersistConfig = {
+  key: "layers",
+  storage,
+};
+
+const panelsPersistedReducer = persistReducer(
+  panelsPersistConfig,
+  panelsReducer
+);
+
+const layersPersistedReducer = persistReducer(
+  layersPersistConfig,
+  layersReducer
+);
 
 const rootReducer = combineReducers({
   panels: panelsPersistedReducer,
-  layers: layersReducer, 
-})
+  layers: layersPersistedReducer,
+});
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -24,4 +37,4 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;

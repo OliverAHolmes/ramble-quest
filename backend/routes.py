@@ -18,22 +18,21 @@ async def upload_geojson(file: UploadFile = File(...)):
     # Initialize database session
     db = SessionLocal()
 
-    feature_type = geojson_dict.get("type", "Unknown")
-    db_feature = Feature(
-        feature=geojson_dict, name=filename
-    )
+    db_feature = Feature(feature=geojson_dict, name=filename)
     db.add(db_feature)
 
     db.commit()
+    # Fetching the ID of the committed feature
+    feature_id = db_feature.id
+
     db.close()
 
-    return {"message": "GeoJSON features saved to SQLite"}
+    return {"message": "GeoJSON features saved to SQLite", "feature_id": feature_id}
 
 
-@router.get("/")
+@router.get("")
 async def get_all_features():
     db = SessionLocal()
-    print("Getting all features")  # Debugging line
     db_features = db.query(Feature).all()
     db.close()
     return db_features

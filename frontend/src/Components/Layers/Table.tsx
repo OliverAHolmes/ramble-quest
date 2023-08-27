@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { updateLayerList } from "../../redux/layersSlice";
+import { useDispatch } from "react-redux";
+import { updateSelectedLayerId } from "../../redux/layersListSlice";
 
 interface TableDataItem {
   created_at: string;
@@ -15,20 +16,24 @@ interface TableDataItem {
 
 const LayersTable = () => {
   const dispatch = useDispatch();
-  const layers = useSelector((state: RootState) => state.layers);
+  const layers = useSelector((state: RootState) => state.layers.layers);
   const [tableData, setTableData] = useState<TableDataItem[]>([]);
-  useEffect(() => {
-    // Dispatch the fetchLayers action when the component mounts
-    fetch("/features")
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(updateLayerList(data));
-      });
-  }, [dispatch]);
+  const selectedLayerId = useSelector((state: RootState) => state.layers.selectedLayerId);
+  const [selectedLayerIdState, setSelectedLayerId] = useState<number | null>(selectedLayerId || null);
 
   useEffect(() => {
-    setTableData(layers.layers);
+    setTableData(layers);
   }, [layers]);
+
+  useEffect(() => {
+    if(selectedLayerIdState === null) return;
+    dispatch(updateSelectedLayerId(selectedLayerIdState));
+
+  }, [dispatch, selectedLayerIdState]);
+
+  const handleRowClick = (id: number) => {
+    setSelectedLayerId(id);
+  };
 
   return (
     <section className="container px-4 mx-auto">
@@ -39,6 +44,10 @@ const LayersTable = () => {
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-slate-950">
                   <tr>
+                    <th
+                      scope="col"
+                      className="px-4 py-3.5 text-sm font-normal text-right rtl:text-right text-gray-500 dark:text-gray-400"
+                    ></th>
                     <th
                       scope="col"
                       className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -95,7 +104,20 @@ const LayersTable = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                   {tableData.map((row, index) => (
-                    <tr key={index}>
+                    <tr key={index}
+                    onClick={() => handleRowClick(row.id)}
+                    className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                        <div className="inline-flex items-center gap-x-3">
+                          <input
+                            type="radio"
+                            name="layer"
+                            checked={selectedLayerId === row.id}
+                            onChange={() => handleRowClick(row.id)}
+                          />
+                        </div>
+                      </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="inline-flex items-center gap-x-3">
                           <span>{row.id}</span>

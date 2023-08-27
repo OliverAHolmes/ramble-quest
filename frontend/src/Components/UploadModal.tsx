@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { store } from "../redux/store";
 import { setUploadGeoJsonVisable } from "../redux/panelsSlice";
-import { updateLayerList } from "../redux/layersSlice";
+import { updateLayerList } from "../redux/layersListSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
+import { updateSelectedLayerId } from "../redux/layersListSlice";
 
 const UploadModal = () => {
   const dispatch = useDispatch();
-  const state = store.getState();
-  const panelVisable = useSelector((state: RootState) => state.panels.uploadGeoJson.visible );
+  const panelVisable = useSelector(
+    (state: RootState) => state.panels.uploadGeoJson.visible
+  );
   const [isOpen, setIsOpen] = useState(panelVisable);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const [selectedLayerId, setSelectedLayerId] = useState<number | null>(null);
 
   useEffect(() => {
     setIsOpen(panelVisable);
@@ -21,29 +22,32 @@ const UploadModal = () => {
     dispatch(setUploadGeoJsonVisable(false));
   };
 
-  const handleTextUpdate = (e: any) => {
-    console.log(e.target.value);
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
 
+  useEffect(() => {
+    if(selectedLayerId === null) return;
+    console.log("selectedLayerId", selectedLayerId);
+    dispatch(updateSelectedLayerId(selectedLayerId));
+  }, [dispatch, selectedLayerId]);
+
   const handleUpload = async () => {
     if (selectedFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append("file", selectedFile);
 
       try {
-        const response = await fetch('features/upload', {
-          method: 'POST',
-          body: formData
+        const response = await fetch("features/upload", {
+          method: "POST",
+          body: formData,
         });
 
         if (response.ok) {
-          console.log('File uploaded successfully');
+          const responseData = await response.json();
+          setSelectedLayerId(responseData.feature_id);
 
           fetch("/features")
             .then((response) => response.json())
@@ -52,12 +56,11 @@ const UploadModal = () => {
             });
 
           dispatch(setUploadGeoJsonVisable(false));
-          
         } else {
-          console.log('File upload failed', response);
+          console.log("File upload failed", response);
         }
       } catch (error) {
-        console.error('There was a problem uploading the file', error);
+        console.error("There was a problem uploading the file", error);
       }
     }
   };
@@ -96,7 +99,8 @@ const UploadModal = () => {
 
               <div className="flex items-center justify-between w-full mt-5 gap-x-2 ">
                 <input
-                  type="file" onChange={handleFileChange} 
+                  type="file"
+                  onChange={handleFileChange}
                   className="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300  cursor-pointer"
                   // onChange={(e) => handleTextUpdate}
                 />
@@ -116,9 +120,10 @@ const UploadModal = () => {
                   Cancel
                 </button>
 
-                <button 
-                onClick={handleUpload}
-                className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                <button
+                  onClick={handleUpload}
+                  className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                >
                   Upload
                 </button>
               </div>

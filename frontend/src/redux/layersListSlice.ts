@@ -10,11 +10,12 @@ interface Layer {
   name: string;
 }
 
-export interface LayersState {
+export interface LayersListState {
   layers: Layer[]
+  selectedLayerId?: number
 }
 
-const initialPanelsState: LayersState = {
+const initialPanelsState: LayersListState = {
   layers: []
 };
 
@@ -25,9 +26,13 @@ const panelsSlice = createSlice({
     updateLayerList: (state, action: PayloadAction<Layer[]>) => {
       state.layers = action.payload;
     },
+    updateSelectedLayerId: (state, action: PayloadAction<number>) => {
+      console.log("updateSelectedLayerId", action.payload);
+      state.selectedLayerId = action.payload;
+    }
   },
 });
 
-export const { updateLayerList } = panelsSlice.actions;
+export const { updateLayerList, updateSelectedLayerId } = panelsSlice.actions;
 
 export default panelsSlice.reducer;
