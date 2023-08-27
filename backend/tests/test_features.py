@@ -19,7 +19,7 @@ def test_upload_geojson():
         )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {"message": "GeoJSON features saved to SQLite"}
+    assert response.json() == {'message': 'GeoJSON features saved to SQLite', 'feature_id': 1}
 
     # Validate database
     db = SessionLocal()
