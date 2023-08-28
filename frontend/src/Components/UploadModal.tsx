@@ -4,6 +4,7 @@ import { updateLayerList } from "../redux/layersListSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { updateSelectedLayerId } from "../redux/layersListSlice";
+import UploadError from "./UploadError";
 
 const UploadModal = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const UploadModal = () => {
   const [isOpen, setIsOpen] = useState(panelVisable);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedLayerId, setSelectedLayerId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsOpen(panelVisable);
@@ -29,7 +31,7 @@ const UploadModal = () => {
   };
 
   useEffect(() => {
-    if(selectedLayerId === null) return;
+    if (selectedLayerId === null) return;
     console.log("selectedLayerId", selectedLayerId);
     dispatch(updateSelectedLayerId(selectedLayerId));
   }, [dispatch, selectedLayerId]);
@@ -56,8 +58,10 @@ const UploadModal = () => {
             });
 
           dispatch(setUploadGeoJsonVisable(false));
+          setError(null);
         } else {
-          console.log("File upload failed", response);
+          const errorData = await response.json();
+          setError(errorData.detail || "File upload failed");
         }
       } catch (error) {
         console.error("There was a problem uploading the file", error);
@@ -76,6 +80,8 @@ const UploadModal = () => {
         >
           <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
+              {error && <UploadError message={error} />}
+              <br />
               <div className="flex items-center justify-center mx-auto">
                 <img
                   className="h-full rounded-lg"
@@ -85,6 +91,7 @@ const UploadModal = () => {
               </div>
 
               <div className="mt-5 text-center">
+
                 <h3
                   className="text-lg font-medium text-gray-800 dark:text-white"
                   id="modal-title"
