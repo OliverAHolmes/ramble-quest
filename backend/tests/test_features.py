@@ -79,7 +79,7 @@ def test_upload_missing_features_field():
             files={"file": ("failed_case_no_features.geojson", f, "application/json")},
         )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {"detail": "Invalid GeoJSON, missing 'features' field."}
+    assert response.json() == {"detail": "Invalid GeoJSON, missing 'geometry' or 'features' field."}
 
 
 def test_get_feature_by_id():

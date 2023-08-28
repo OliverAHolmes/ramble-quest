@@ -53,10 +53,10 @@ async def upload_geojson(file: UploadFile = File(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid GeoJSON, missing 'type' field.",
         )
-    if "features" not in geojson_dict:
+    if "features" not in geojson_dict and "geometry" not in geojson_dict :
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid GeoJSON, missing 'features' field.",
+            detail="Invalid GeoJSON, missing 'geometry' or 'features' field.",
         )
 
     # Get file name to set as feature_name

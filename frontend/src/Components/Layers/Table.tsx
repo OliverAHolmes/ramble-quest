@@ -2,27 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useDispatch } from "react-redux";
-import { updateSelectedLayerId } from "../../redux/layersListSlice";
-
-interface TableDataItem {
-  created_at: string;
-  feature: {
-    type: string;
-    features: any[]; // Define the type more specifically if you know it
-  };
-  id: number;
-  name: string;
-}
+import { updateSelectedLayerId, Layer } from "../../redux/layersListSlice";
 
 const LayersTable = () => {
   const dispatch = useDispatch();
   const layers = useSelector((state: RootState) => state.layers.layers);
-  const [tableData, setTableData] = useState<TableDataItem[]>([]);
+  const [tableData, setTableData] = useState<Layer[]>([]);
   const selectedLayerId = useSelector(
     (state: RootState) => state.layers.selectedLayerId,
   );
 
   useEffect(() => {
+    console.log("LayersTable: useEffect: layers: ", layers);
     setTableData(layers);
   }, [layers]);
 
@@ -96,7 +87,9 @@ const LayersTable = () => {
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        {row.feature.type}
+                        {row.feature.type === "FeatureCollection"
+                          ? row.feature.type
+                          : row.feature.geometry?.type}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                         <svg

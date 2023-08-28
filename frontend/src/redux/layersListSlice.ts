@@ -1,10 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Layer {
+export interface Layer {
   created_at: string;
   feature: {
     type: string;
-    features: any[]; // Define the type more specifically if you know it
+    features: any[];
+    geometry?: {
+      type: string;
+      coordinates: number[];
+    };
   };
   id: number;
   name: string;

@@ -32,6 +32,9 @@ const Map: React.FC = () => {
       if (map.current?.getLayer(`circle-${layerId}`)) {
         map.current.removeLayer(`circle-${layerId}`);
       }
+      if (map.current?.getLayer(`line-${layerId}`)) {
+        map.current.removeLayer(`line-${layerId}`);
+      }
 
       if (map.current?.getSource(layerId)) {
         map.current.removeSource(layerId);
@@ -67,12 +70,29 @@ const Map: React.FC = () => {
         filter: ["==", "$type", "Point"],
       });
 
+      map.current?.addLayer({
+        id: `line-${layerId}`,
+        type: "line",
+        source: layerId,
+        layout: {},
+        paint: {
+          "line-color": slecetedLayerId === layer.id ? "#FF0000" : "#0080ff",
+          "line-width": 2,
+        },
+        filter: ["==", "$type", "LineString"],
+      });
+
       if (slecetedLayerId === layer.id) {
         const boundingBox = bbox(layer.feature);
-        map.current?.fitBounds([
-          [boundingBox[0], boundingBox[1]],
-          [boundingBox[2], boundingBox[3]],
-        ]);
+        map.current?.fitBounds(
+          [
+            [boundingBox[0], boundingBox[1]],
+            [boundingBox[2], boundingBox[3]],
+          ],
+          {
+            padding: { top: 50, bottom: 50, left: 50, right: 50 },
+          },
+        );
       }
     });
   }, [isMapLoaded, layers, slecetedLayerId]);
