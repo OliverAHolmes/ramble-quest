@@ -19,7 +19,10 @@ def test_upload_geojson():
         )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {'message': 'GeoJSON features saved to SQLite', 'feature_id': 1}
+    assert response.json() == {
+        "message": "GeoJSON features saved to SQLite",
+        "feature_id": 1,
+    }
 
     # Validate database
     db = SessionLocal()
@@ -28,18 +31,18 @@ def test_upload_geojson():
     assert len(db_features) == 1
     db.close()
 
+
 def test_upload_invalid_file():
     # Open the test_data.json file
     with open("data/failed_test.txt", "rb") as f:
         # Perform the upload
         response = client.post(
             "/features/upload",
-            files={
-                "file": ("failed_test.txt", f, "application/json")
-            },
+            files={"file": ("failed_test.txt", f, "application/json")},
         )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {'detail': 'Invalid GeoJson content in file.'}
+    assert response.json() == {"detail": "Invalid GeoJson content in file."}
+
 
 def test_upload_geojson_decode_error():
     # Prepare a binary file that will cause a UnicodeDecodeError when decoded as utf-8
@@ -48,13 +51,12 @@ def test_upload_geojson_decode_error():
         # Perform the upload
         response = client.post(
             "/features/upload",
-            files={
-                "file": ("logo.jpeg", f, "application/jpeg")
-            },
+            files={"file": ("logo.jpeg", f, "application/jpeg")},
         )
-    
+
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json() == {"detail": "Not a vaild GeoJson file."}
+
 
 def test_upload_missing_type_field():
     # Open the test_data.json file
@@ -62,12 +64,11 @@ def test_upload_missing_type_field():
         # Perform the upload
         response = client.post(
             "/features/upload",
-            files={
-                "file": ("failed_case_no_type.geojson", f, "application/json")
-            },
+            files={"file": ("failed_case_no_type.geojson", f, "application/json")},
         )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {'detail': "Invalid GeoJSON, missing 'type' field."}
+    assert response.json() == {"detail": "Invalid GeoJSON, missing 'type' field."}
+
 
 def test_upload_missing_features_field():
     # Open the test_data.json file
@@ -75,12 +76,10 @@ def test_upload_missing_features_field():
         # Perform the upload
         response = client.post(
             "/features/upload",
-            files={
-                "file": ("failed_case_no_features.geojson", f, "application/json")
-            },
+            files={"file": ("failed_case_no_features.geojson", f, "application/json")},
         )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {'detail': "Invalid GeoJSON, missing 'features' field."}
+    assert response.json() == {"detail": "Invalid GeoJSON, missing 'features' field."}
 
 
 def test_get_feature_by_id():
@@ -93,12 +92,16 @@ def test_get_feature_by_id():
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["id"] == feature_id
 
+
 def test_get_feature_by_id_not_found():
     # Test a feature ID that does not exist
-    response = client.get("/features/9999")  # Assuming 9999 is an ID that does not exist in your DB
+    response = client.get(
+        "/features/9999"
+    )  # Assuming 9999 is an ID that does not exist in your DB
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"detail": "Feature not found"}
+
 
 def test_get_all_features():
     response = client.get("/features")
@@ -122,9 +125,12 @@ def test_delete_feature_by_id():
     db.close()
     assert db_feature is None
 
+
 def test_delete_feature_by_id_not_found():
     # Test a feature ID that does not exist
-    response = client.delete("/features/delete/9999")  # Assuming 9999 is an ID that does not exist in your DB
+    response = client.delete(
+        "/features/delete/9999"
+    )  # Assuming 9999 is an ID that does not exist in your DB
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"detail": "Feature not found"}

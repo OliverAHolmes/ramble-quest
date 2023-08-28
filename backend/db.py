@@ -1,3 +1,5 @@
+"""Module for database setup and utilities using SQLModel and SQLAlchemy."""
+
 import os
 from sqlmodel import create_engine, SQLModel
 from sqlalchemy.orm import sessionmaker
@@ -13,15 +15,24 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def create_db():
+    """Creates a new database if it doesn't exist, and removes it if we are in testing mode."""
+
     if settings.ENV == "testing" and os.path.exists(settings.db_path):
         os.remove(settings.db_path)
 
     if not os.path.exists(settings.db_path):
         SQLModel.metadata.create_all(engine)
 
+
 def get_db():
-    db = SessionLocal()
+    """Gets a new database session and closes it when done.
+
+    Yields:
+        Session: a new database session
+    """
+
+    session = SessionLocal()
     try:
-        yield db
+        yield session
     finally:
-        db.close()
+        session.close()
