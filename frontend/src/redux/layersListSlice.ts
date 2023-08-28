@@ -27,7 +27,6 @@ const panelsSlice = createSlice({
       state.layers = action.payload;
     },
     updateSelectedLayerId: (state, action: PayloadAction<number>) => {
-      console.log("updateSelectedLayerId", action.payload);
       state.selectedLayerId = action.payload;
     }
   },

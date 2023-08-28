@@ -18,21 +18,16 @@ const LayersTable = () => {
   const dispatch = useDispatch();
   const layers = useSelector((state: RootState) => state.layers.layers);
   const [tableData, setTableData] = useState<TableDataItem[]>([]);
-  const selectedLayerId = useSelector((state: RootState) => state.layers.selectedLayerId);
-  const [selectedLayerIdState, setSelectedLayerId] = useState<number | null>(selectedLayerId || null);
-
+  const selectedLayerId = useSelector(
+    (state: RootState) => state.layers.selectedLayerId
+  );
+  
   useEffect(() => {
     setTableData(layers);
   }, [layers]);
 
-  useEffect(() => {
-    if(selectedLayerIdState === null) return;
-    dispatch(updateSelectedLayerId(selectedLayerIdState));
-
-  }, [dispatch, selectedLayerIdState]);
-
   const handleRowClick = (id: number) => {
-    setSelectedLayerId(id);
+    dispatch(updateSelectedLayerId(id));
   };
 
   return (
@@ -79,9 +74,10 @@ const LayersTable = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                   {tableData.map((row, index) => (
-                    <tr key={index}
-                    onClick={() => handleRowClick(row.id)}
-                    className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                    <tr
+                      key={index}
+                      onClick={() => handleRowClick(row.id)}
+                      className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="inline-flex items-center gap-x-3">

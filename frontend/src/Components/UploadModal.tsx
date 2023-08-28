@@ -32,7 +32,6 @@ const UploadModal = () => {
 
   useEffect(() => {
     if (selectedLayerId === null) return;
-    console.log("selectedLayerId", selectedLayerId);
     dispatch(updateSelectedLayerId(selectedLayerId));
   }, [dispatch, selectedLayerId]);
 
@@ -73,7 +72,7 @@ const UploadModal = () => {
     <div className="relative flex justify-center">
       {isOpen && (
         <div
-          className="fixed inset-0 z-10 overflow-y-auto"
+          className="fixed inset-0 z-50 overflow-y-auto"
           aria-labelledby="modal-title"
           role="dialog"
           aria-modal="true"
