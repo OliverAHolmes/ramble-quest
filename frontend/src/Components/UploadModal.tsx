@@ -90,7 +90,6 @@ const UploadModal = () => {
               </div>
 
               <div className="mt-5 text-center">
-
                 <h3
                   className="text-lg font-medium text-gray-800 dark:text-white"
                   id="modal-title"
@@ -105,17 +104,11 @@ const UploadModal = () => {
 
               <div className="flex items-center justify-between w-full mt-5 gap-x-2 ">
                 <input
+                  data-testid="file-input"
                   type="file"
                   onChange={handleFileChange}
                   className="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300  cursor-pointer"
-                  // onChange={(e) => handleTextUpdate}
                 />
-                {/* <input type="file" onChange={handleFileChange} /> */}
-                {/* <button 
-                onClick={handleUpload}
-                className="rounded-md hidden sm:block p-1.5 text-gray-700 bg-white border border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring transition-colors duration-300 hover:text-blue-500 dark:hover:text-blue-500">
-                Upload
-                </button> */}
               </div>
 
               <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
@@ -127,6 +120,7 @@ const UploadModal = () => {
                 </button>
 
                 <button
+                  data-testid="upload-button"
                   onClick={handleUpload}
                   className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
                 >
