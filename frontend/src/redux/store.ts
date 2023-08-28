@@ -25,7 +25,7 @@ const layersPersistedReducer = persistReducer(
   layersReducer,
 );
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   panels: panelsPersistedReducer,
   layers: layersPersistedReducer,
 });
