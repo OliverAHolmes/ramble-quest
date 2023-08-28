@@ -2,7 +2,7 @@ import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loade
 import React, { useEffect, useRef, useState } from "react";
 import "./Map.css";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { type RootState } from "../redux/store";
 import bbox from "@turf/bbox";
 
 mapboxgl.accessToken =
@@ -25,7 +25,7 @@ const Map: React.FC = () => {
     // Remove layers that are no longer in 'layers'
     mapLayers.forEach((layerId) => {
       if (!layers.find((layer) => `layer-${layer.id}` === layerId)) {
-        ['fill', 'circle', 'line'].forEach((type) => {
+        ["fill", "circle", "line"].forEach((type) => {
           const id = `${type}-${layerId}`;
           if (map.current?.getLayer(id)) {
             map.current.removeLayer(id);

@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     // Dispatch the fetchLayers action when the component mounts
     fetch("/features")
-      .then((response) => response.json())
+      .then(async (response) => await response.json())
       .then((data) => {
         dispatch(updateLayerList(data));
       });

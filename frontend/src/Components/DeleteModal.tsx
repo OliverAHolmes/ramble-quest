@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { setDeleteLayerVisable } from "../redux/panelsSlice";
-import { updateLayerList } from "../redux/layersListSlice";
+import {
+  updateLayerList,
+  updateSelectedLayerId,
+} from "../redux/layersListSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../redux/store";
-import { updateSelectedLayerId } from "../redux/layersListSlice";
+import { type RootState } from "../redux/store";
 import UploadError from "./UploadError";
 
 const DeleteModal = () => {
   const dispatch = useDispatch();
   const panelVisable = useSelector(
-    (state: RootState) => state.panels.deleteLayer.visible
+    (state: RootState) => state.panels.deleteLayer.visible,
   );
   const layerId = useSelector(
-    (state: RootState) => state.panels.deleteLayer.id
+    (state: RootState) => state.panels.deleteLayer.id,
   );
   const [isOpen, setIsOpen] = useState(panelVisable);
   const [selectedLayerId, setSelectedLayerId] = useState<number | null>(null);
@@ -42,7 +44,7 @@ const DeleteModal = () => {
         setSelectedLayerId(responseData.feature_id);
 
         fetch("/features")
-          .then((response) => response.json())
+          .then(async (response) => await response.json())
           .then((data) => {
             dispatch(updateLayerList(data));
           });
@@ -51,7 +53,7 @@ const DeleteModal = () => {
         dispatch(setDeleteLayerVisable({ visible: false, id: undefined }));
       } else {
         const errorData = await response.json();
-        setError(errorData.detail || "Failed to delete layer.");
+        setError(errorData.detail ?? "Failed to delete layer.");
       }
     } catch (error) {
       setError("There was a problem deleting the layer.");

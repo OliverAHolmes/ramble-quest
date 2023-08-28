@@ -5,7 +5,7 @@ This project uses a minimal React application and integrates the [MapBox GL JS l
 ## Prerequisites
 
 - Node.js (version 16 or higher)
-  
+
 **Note:** It's recommended to start the backend server before running the frontend. For backend setup instructions, please refer to its respective README.
 
 ## Quick Start

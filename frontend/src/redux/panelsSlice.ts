@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-type DeleteLayerState = {
+interface DeleteLayerState {
   visible: boolean;
   id?: number;
-};
+}
 export interface PanelsState {
   uploadGeoJson: {
     visible: boolean;

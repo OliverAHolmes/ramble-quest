@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { setUploadGeoJsonVisable } from "../redux/panelsSlice";
-import { updateLayerList } from "../redux/layersListSlice";
+import {
+  updateLayerList,
+  updateSelectedLayerId,
+} from "../redux/layersListSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../redux/store";
-import { updateSelectedLayerId } from "../redux/layersListSlice";
+import { type RootState } from "../redux/store";
 import UploadError from "./UploadError";
 
 const UploadModal = () => {
@@ -51,7 +53,7 @@ const UploadModal = () => {
           setSelectedLayerId(responseData.feature_id);
 
           fetch("/features")
-            .then((response) => response.json())
+            .then(async (response) => await response.json())
             .then((data) => {
               dispatch(updateLayerList(data));
             });

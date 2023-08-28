@@ -48,11 +48,13 @@ describe("UploadModal", () => {
   it("displays UploadError when an error occurs", async () => {
     customRender();
     // Prepare mocked fetch response
-    const mockedFetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ detail: "File upload failed" }),
-      }),
+    const mockedFetch = jest.fn(
+      async () =>
+        await Promise.resolve({
+          ok: false,
+          json: async () =>
+            await Promise.resolve({ detail: "File upload failed" }),
+        }),
     );
     (global.fetch as unknown as typeof mockedFetch) = mockedFetch;
 

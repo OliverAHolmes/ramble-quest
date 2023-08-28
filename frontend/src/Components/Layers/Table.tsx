@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useDispatch } from "react-redux";
-import { updateSelectedLayerId, Layer } from "../../redux/layersListSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { type RootState } from "../../redux/store";
+import { updateSelectedLayerId, type Layer } from "../../redux/layersListSlice";
 import { setDeleteLayerVisable } from "../../redux/panelsSlice";
 
 const LayersTable = () => {
@@ -10,7 +9,7 @@ const LayersTable = () => {
   const layers = useSelector((state: RootState) => state.layers.layers);
   const [tableData, setTableData] = useState<Layer[]>([]);
   const selectedLayerId = useSelector(
-    (state: RootState) => state.layers.selectedLayerId
+    (state: RootState) => state.layers.selectedLayerId,
   );
 
   useEffect(() => {
@@ -69,7 +68,9 @@ const LayersTable = () => {
                       className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <td
-                        onClick={() => handleRowClick(row.id)}
+                        onClick={() => {
+                          handleRowClick(row.id);
+                        }}
                         className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
                       >
                         <div className="inline-flex items-center gap-x-3">
@@ -78,12 +79,16 @@ const LayersTable = () => {
                             name="layer"
                             className="cursor-pointer"
                             checked={selectedLayerId === row.id}
-                            onChange={() => handleRowClick(row.id)}
+                            onChange={() => {
+                              handleRowClick(row.id);
+                            }}
                           />
                         </div>
                       </td>
                       <td
-                        onClick={() => handleRowClick(row.id)}
+                        onClick={() => {
+                          handleRowClick(row.id);
+                        }}
                         className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
                       >
                         <div className="inline-flex items-center gap-x-3">
@@ -91,7 +96,9 @@ const LayersTable = () => {
                         </div>
                       </td>
                       <td
-                        onClick={() => handleRowClick(row.id)}
+                        onClick={() => {
+                          handleRowClick(row.id);
+                        }}
                         className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
                       >
                         {row.feature.type === "FeatureCollection"
@@ -100,7 +107,9 @@ const LayersTable = () => {
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                         <button
-                          onClick={() => handleDelete(row.id)}
+                          onClick={() => {
+                            handleDelete(row.id);
+                          }}
                           className="bg-red-300 dark:bg-red-900 px-4 py-2 font-medium text-gray-600 transition-colors duration-200 sm:px-6 dark:hover:bg-red-600 dark:text-gray-300 hover:bg-red-400"
                         >
                           <svg

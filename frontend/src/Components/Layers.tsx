@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import LayersTable from "./Layers/Table";
 import NoLayers from "./Layers/NoLayers";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { type RootState } from "../redux/store";
 
 const Layers = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -19,12 +19,7 @@ const Layers = () => {
 
   return (
     <div className="absolute top-[80px] right-[5px]">
-      {isOpen &&
-        (layers.length === 0 ? (
-          <NoLayers />
-        ) : (
-          <LayersTable />
-        ))}
+      {isOpen && (layers.length === 0 ? <NoLayers /> : <LayersTable />)}
     </div>
   );
 };
