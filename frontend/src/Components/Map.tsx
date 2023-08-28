@@ -1,9 +1,10 @@
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import React, { useEffect, useRef, useState } from "react";
-import "./Map.css";
-import { useSelector } from "react-redux";
+import { updateLayerList } from "../redux/layersListSlice";
+import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../redux/store";
 import bbox from "@turf/bbox";
+import "./Map.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic3RhY2tzb25kYXZlIiwiYSI6ImNsbDAwOXU4ejA3dGkzZW82NGRveWpiMTQifQ.4YsujGfX1Nl7NbQgkAi90g";
@@ -17,6 +18,16 @@ const Map: React.FC = () => {
   const slecetedLayerId = useSelector(
     (state: RootState) => state.layers.selectedLayerId,
   );
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // Dispatch the fetchLayers action when the component mounts
+    fetch("/features")
+      .then(async (response) => await response.json())
+      .then((data) => {
+        dispatch(updateLayerList(data));
+      });
+  }, [dispatch]);
 
   // Add and Remove layers as needed
   useEffect(() => {
