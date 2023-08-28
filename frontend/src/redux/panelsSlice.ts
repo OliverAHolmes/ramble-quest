@@ -36,10 +36,14 @@ const panelsSlice = createSlice({
     },
     setLayerAttributeTableVisable: (state, action: PayloadAction<boolean>) => {
       state.layerAttributeTable.visible = action.payload;
-    }
+    },
   },
 });
 
-export const { setUploadGeoJsonVisable, setLayerListVisable, setLayerAttributeTableVisable } = panelsSlice.actions;
+export const {
+  setUploadGeoJsonVisable,
+  setLayerListVisable,
+  setLayerAttributeTableVisable,
+} = panelsSlice.actions;
 
 export default panelsSlice.reducer;

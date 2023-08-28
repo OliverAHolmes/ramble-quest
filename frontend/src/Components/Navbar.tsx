@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { setUploadGeoJsonVisable, setLayerListVisable } from "../redux/panelsSlice";
+import {
+  setUploadGeoJsonVisable,
+  setLayerListVisable,
+} from "../redux/panelsSlice";
 import { RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -7,7 +10,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const layerListVisable = useSelector(
-    (state: RootState) => state.panels.layerList.visible
+    (state: RootState) => state.panels.layerList.visible,
   );
 
   const handleUploadButtClick = () => {
@@ -25,7 +28,7 @@ const Navbar = () => {
       <div className="px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
         <div className="flex items-center justify-between">
           <span className="text-gray-700 dark:text-gray-200 md:mx-4 md:my-0 select-none">
-            <span className="text-3xl" >🏕️</span> Ramble Quest
+            <span className="text-3xl">🏕️</span> Ramble Quest
           </span>
 
           <div className="flex lg:hidden">
@@ -64,7 +67,11 @@ const Navbar = () => {
           <div className="flex flex-col md:flex-row md:mx-6">
             <button
               onClick={handleLayersButtClick}
-              className={`flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 ${layerListVisable ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} dark:text-gray-300`}
+              className={`flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 gap-x-3 ${
+                layerListVisable
+                  ? "bg-gray-100 dark:bg-gray-700"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-700"
+              } dark:text-gray-300`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

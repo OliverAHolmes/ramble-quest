@@ -14,7 +14,7 @@ const Map: React.FC = () => {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const layers = useSelector((state: RootState) => state.layers.layers);
   const slecetedLayerId = useSelector(
-    (state: RootState) => state.layers.selectedLayerId
+    (state: RootState) => state.layers.selectedLayerId,
   );
 
   // Add and Remove layers as needed
@@ -51,7 +51,7 @@ const Map: React.FC = () => {
           "fill-color": slecetedLayerId === layer.id ? "#FF0000" : "#0080ff",
           "fill-opacity": 0.5,
         },
-        'filter': ['==', '$type', 'Polygon']
+        filter: ["==", "$type", "Polygon"],
       });
 
       map.current?.addLayer({
@@ -60,11 +60,11 @@ const Map: React.FC = () => {
         source: layerId,
         layout: {},
         paint: {
-          'circle-radius': 10,
+          "circle-radius": 10,
           "circle-color": slecetedLayerId === layer.id ? "#FF0000" : "#0080ff",
           "circle-opacity": 0.5,
         },
-        'filter': ['==', '$type', 'Point']
+        filter: ["==", "$type", "Point"],
       });
 
       if (slecetedLayerId === layer.id) {
@@ -87,7 +87,7 @@ const Map: React.FC = () => {
       zoom: 14,
     });
 
-    map.current.on('load', () => {
+    map.current.on("load", () => {
       setIsMapLoaded(true);
     });
 

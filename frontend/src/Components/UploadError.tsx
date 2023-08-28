@@ -1,8 +1,8 @@
 import React from "react";
 
 interface UploadErrorProps {
-    message: string;
-  }
+  message: string;
+}
 
 const UploadError: React.FC<UploadErrorProps> = ({ message }) => {
   return (
@@ -23,9 +23,7 @@ const UploadError: React.FC<UploadErrorProps> = ({ message }) => {
           <span className="font-semibold text-red-500 dark:text-red-400">
             Error
           </span>
-          <p className="text-sm text-gray-600 dark:text-gray-200">
-            {message}
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-200">{message}</p>
         </div>
       </div>
     </div>

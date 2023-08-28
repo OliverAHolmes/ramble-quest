@@ -17,12 +17,12 @@ const layersPersistConfig = {
 
 const panelsPersistedReducer = persistReducer(
   panelsPersistConfig,
-  panelsReducer
+  panelsReducer,
 );
 
 const layersPersistedReducer = persistReducer(
   layersPersistConfig,
-  layersReducer
+  layersReducer,
 );
 
 const rootReducer = combineReducers({

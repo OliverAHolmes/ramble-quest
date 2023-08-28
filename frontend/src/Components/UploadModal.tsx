@@ -9,7 +9,7 @@ import UploadError from "./UploadError";
 const UploadModal = () => {
   const dispatch = useDispatch();
   const panelVisable = useSelector(
-    (state: RootState) => state.panels.uploadGeoJson.visible
+    (state: RootState) => state.panels.uploadGeoJson.visible,
   );
   const [isOpen, setIsOpen] = useState(panelVisable);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

@@ -9,7 +9,7 @@ const Layers = () => {
   const layers = useSelector((state: RootState) => state.layers.layers);
 
   const layerListVisable = useSelector(
-    (state: RootState) => state.panels.layerList.visible
+    (state: RootState) => state.panels.layerList.visible,
   );
 
   useEffect(() => {

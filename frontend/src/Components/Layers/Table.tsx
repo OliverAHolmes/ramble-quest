@@ -19,9 +19,9 @@ const LayersTable = () => {
   const layers = useSelector((state: RootState) => state.layers.layers);
   const [tableData, setTableData] = useState<TableDataItem[]>([]);
   const selectedLayerId = useSelector(
-    (state: RootState) => state.layers.selectedLayerId
+    (state: RootState) => state.layers.selectedLayerId,
   );
-  
+
   useEffect(() => {
     setTableData(layers);
   }, [layers]);
