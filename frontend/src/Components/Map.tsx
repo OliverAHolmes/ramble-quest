@@ -25,8 +25,15 @@ const Map: React.FC = () => {
     layers.forEach((layer) => {
       const layerId = `layer-${layer.id}`;
 
-      if (map.current?.getLayer(layerId)) {
-        map.current.removeLayer(layerId);
+      // Remove existing layers
+      if (map.current?.getLayer(`fill-${layerId}`)) {
+        map.current.removeLayer(`fill-${layerId}`);
+      }
+      if (map.current?.getLayer(`circle-${layerId}`)) {
+        map.current.removeLayer(`circle-${layerId}`);
+      }
+
+      if (map.current?.getSource(layerId)) {
         map.current.removeSource(layerId);
       }
 
@@ -36,7 +43,7 @@ const Map: React.FC = () => {
       });
 
       map.current?.addLayer({
-        id: layerId,
+        id: `fill-${layerId}`,
         type: "fill",
         source: layerId,
         layout: {},
@@ -44,6 +51,20 @@ const Map: React.FC = () => {
           "fill-color": slecetedLayerId === layer.id ? "#FF0000" : "#0080ff",
           "fill-opacity": 0.5,
         },
+        'filter': ['==', '$type', 'Polygon']
+      });
+
+      map.current?.addLayer({
+        id: `circle-${layerId}`,
+        type: "circle",
+        source: layerId,
+        layout: {},
+        paint: {
+          'circle-radius': 10,
+          "circle-color": slecetedLayerId === layer.id ? "#FF0000" : "#0080ff",
+          "circle-opacity": 0.5,
+        },
+        'filter': ['==', '$type', 'Point']
       });
 
       if (slecetedLayerId === layer.id) {
