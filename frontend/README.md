@@ -61,3 +61,17 @@ To format the codebase using Prettier:
 ```bash
 yarn format
 ```
+
+### Code Linting
+
+To lint with eslint:
+
+```bash
+yarn lint
+```
+
+To lint and automatically fix issues with eslint:
+
+```bash
+yarn lint:fix
+```
