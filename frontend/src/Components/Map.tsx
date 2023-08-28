@@ -1,5 +1,5 @@
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Map.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -11,7 +11,7 @@ mapboxgl.accessToken =
 const Map: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const layers = useSelector((state: RootState) => state.layers.layers);
   const slecetedLayerId = useSelector(
     (state: RootState) => state.layers.selectedLayerId
@@ -19,7 +19,7 @@ const Map: React.FC = () => {
 
   // Add and Remove layers as needed
   useEffect(() => {
-    if (!map.current || !map.current.isStyleLoaded()) return;
+    if (!isMapLoaded) return;
 
     // Add new layers based on the updated state
     layers.forEach((layer) => {
@@ -54,7 +54,7 @@ const Map: React.FC = () => {
         ]);
       }
     });
-  }, [layers, slecetedLayerId]);
+  }, [isMapLoaded, layers, slecetedLayerId]);
 
   useEffect(() => {
     if (!mapContainer.current) return; // wait for map container to be loaded
@@ -65,6 +65,11 @@ const Map: React.FC = () => {
       center: [149.11427731324218, -35.27469562974684],
       zoom: 14,
     });
+
+    map.current.on('load', () => {
+      setIsMapLoaded(true);
+    });
+
     return () => map.current?.remove();
   }, [mapContainer]);
 
