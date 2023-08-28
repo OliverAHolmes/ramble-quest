@@ -13,7 +13,6 @@ const LayersTable = () => {
   );
 
   useEffect(() => {
-    console.log("LayersTable: useEffect: layers: ", layers);
     setTableData(layers);
   }, [layers]);
 
