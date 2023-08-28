@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type DeleteLayerState = {
+  visible: boolean;
+  id?: number;
+};
 export interface PanelsState {
   uploadGeoJson: {
     visible: boolean;
   };
+  deleteLayer: DeleteLayerState;
   layerList: {
     visible: boolean;
   };
@@ -14,6 +19,9 @@ export interface PanelsState {
 
 const initialPanelsState: PanelsState = {
   uploadGeoJson: {
+    visible: false,
+  },
+  deleteLayer: {
     visible: false,
   },
   layerList: {
@@ -31,6 +39,9 @@ const panelsSlice = createSlice({
     setUploadGeoJsonVisable: (state, action: PayloadAction<boolean>) => {
       state.uploadGeoJson.visible = action.payload;
     },
+    setDeleteLayerVisable: (state, action: PayloadAction<DeleteLayerState>) => {
+      state.deleteLayer = action.payload;
+    },
     setLayerListVisable: (state, action: PayloadAction<boolean>) => {
       state.layerList.visible = action.payload;
     },
@@ -44,6 +55,7 @@ export const {
   setUploadGeoJsonVisable,
   setLayerListVisable,
   setLayerAttributeTableVisable,
+  setDeleteLayerVisable,
 } = panelsSlice.actions;
 
 export default panelsSlice.reducer;

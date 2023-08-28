@@ -56,8 +56,8 @@ const UploadModal = () => {
               dispatch(updateLayerList(data));
             });
 
-          dispatch(setUploadGeoJsonVisable(false));
           setError(null);
+          dispatch(setUploadGeoJsonVisable(false));
         } else {
           const errorData = await response.json();
           setError(errorData.detail || "File upload failed");

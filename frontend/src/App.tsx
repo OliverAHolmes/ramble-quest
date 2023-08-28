@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Map from "./Components/Map";
 import Navbar from "./Components/Navbar";
 import UploadModal from "./Components/UploadModal";
+import DeleteModal from "./Components/DeleteModal";
 import Layers from "./Components/Layers";
 import { updateLayerList } from "./redux/layersListSlice";
 import { useDispatch } from "react-redux";
@@ -24,6 +25,7 @@ function App() {
       <Map />
       <Layers />
       <UploadModal />
+      <DeleteModal />
     </div>
   );
 }
