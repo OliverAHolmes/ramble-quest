@@ -25,7 +25,7 @@ const Navbar = () => {
       <div className="px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
         <div className="flex items-center justify-between">
           <span className="text-gray-700 dark:text-gray-200 md:mx-4 md:my-0 select-none">
-            Ramble Quest
+            <span className="text-3xl" >🏕️</span> Ramble Quest
           </span>
 
           <div className="flex lg:hidden">
