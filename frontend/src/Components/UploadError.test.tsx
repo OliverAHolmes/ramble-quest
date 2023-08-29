@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect"; // for the "toBeInTheDocument" matcher
-import UploadError from "./UploadError"; // adjust the import to your file structure
+import UploadError from "./UploadError";
 
 describe("<UploadError />", () => {
   it("should render error message correctly", () => {

@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import configureStore from "redux-mock-store";
 import UploadModal from "./UploadModal";
 import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
 
 // Mock the Redux store
 const mockStore = configureStore([]);
