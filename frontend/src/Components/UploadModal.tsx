@@ -80,7 +80,7 @@ const UploadModal = () => {
           aria-modal="true"
         >
           <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
+            <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white border shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
               {error && <UploadError message={error} />}
               <br />
               <div className="flex items-center justify-center mx-auto">
