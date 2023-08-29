@@ -24,8 +24,8 @@ const Map: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [mapLayers, setMapLayers] = useState<Set<string>>(new Set());
   const layers = useSelector((state: RootState) => state.layers.list);
+  const prevLayers = useRef(layers);
   const slecetedLayerId = useSelector(
     (state: RootState) => state.layers.selectedLayerId,
   );
@@ -37,27 +37,7 @@ const Map: React.FC = () => {
   useEffect(() => {
     if (!isMapLoaded) return;
 
-    // Remove layers that are no longer in 'layers'
-    mapLayers.forEach((layerId) => {
-      if (!layers.find((layer) => `layer-${layer.id}` === layerId)) {
-        ["fill", "circle", "line"].forEach((type) => {
-          const id = `${type}-${layerId}`;
-          if (map.current?.getLayer(id)) {
-            map.current.removeLayer(id);
-          }
-        });
-        if (map.current?.getSource(layerId)) {
-          map.current.removeSource(layerId);
-        }
-        mapLayers.delete(layerId);
-      }
-    });
-
-    // Update the set of map layers
-    setMapLayers(new Set(layers.map((layer) => `layer-${layer.id}`)));
-
-    // Add new layers based on the updated state
-    layers.forEach((layer) => {
+    prevLayers.current.forEach((layer) => {
       const layerId = `layer-${layer.id}`;
 
       // Remove existing layers
@@ -74,6 +54,11 @@ const Map: React.FC = () => {
       if (map.current?.getSource(layerId)) {
         map.current.removeSource(layerId);
       }
+    });
+
+    // Add new layers based on the updated state
+    layers.forEach((layer) => {
+      const layerId = `layer-${layer.id}`;
 
       map.current?.addSource(layerId, {
         type: "geojson",
@@ -130,6 +115,8 @@ const Map: React.FC = () => {
         );
       }
     });
+
+    prevLayers.current = layers;
   }, [isMapLoaded, layers, slecetedLayerId]);
 
   useEffect(() => {
