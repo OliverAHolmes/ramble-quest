@@ -59,7 +59,6 @@ async def upload_geojson(file: UploadFile = File(...)):
             detail="Invalid GeoJSON, missing 'geometry' or 'features' field.",
         )
 
-    # Get file name to set as feature_name
     filename = file.filename
 
     # Initialize database session

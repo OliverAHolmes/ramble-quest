@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import Layers from "./Layers"; // Adjust the import based on your folder structure
+import Layers from "./Layers";
 
 // Mock useSelector from react-redux
 import { useSelector } from "react-redux";
@@ -12,7 +12,6 @@ jest.mock("react-redux", () => ({
   useSelector: jest.fn(),
 }));
 
-// Mock other components if needed
 jest.mock("./Layers/Table", () => {
   const MockedLayersTable = () => (
     <div data-testid="layersTable-component">LayersTable</div>

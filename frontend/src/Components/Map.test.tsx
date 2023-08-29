@@ -1,7 +1,7 @@
 import React from "react";
 import { render, act, waitFor } from "@testing-library/react";
 import reactRedux, { useSelector } from "react-redux";
-import Map from "./Map"; // Assuming the Map component file is Map.tsx
+import Map from "./Map";
 import mapboxgl from "mapbox-gl";
 import fetchMock from "jest-fetch-mock";
 import { updateLayerList } from "../redux/layersListSlice";

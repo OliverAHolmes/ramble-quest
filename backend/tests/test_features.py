@@ -27,7 +27,6 @@ def test_upload_geojson():
     # Validate database
     db = SessionLocal()
     db_features = db.query(Feature).all()
-    # Replace 1 with the expected number of features in test_data.json
     assert len(db_features) == 1
     db.close()
 
@@ -46,7 +45,7 @@ def test_upload_invalid_file():
 
 def test_upload_geojson_decode_error():
     # Prepare a binary file that will cause a UnicodeDecodeError when decoded as utf-8
-    # This is just a simple PNG header
+    # This is just a simple JPEG header
     with open("data/logo.jpeg", "rb") as f:
         # Perform the upload
         response = client.post(
@@ -97,7 +96,7 @@ def test_get_feature_by_id_not_found():
     # Test a feature ID that does not exist
     response = client.get(
         "/features/9999"
-    )  # Assuming 9999 is an ID that does not exist in your DB
+    )  # Assuming ID 9999 does not exist in the DB
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"detail": "Feature not found"}
@@ -130,7 +129,7 @@ def test_delete_feature_by_id_not_found():
     # Test a feature ID that does not exist
     response = client.delete(
         "/features/delete/9999"
-    )  # Assuming 9999 is an ID that does not exist in your DB
+    )  # Assuming ID 9999 does not exist in the DB
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"detail": "Feature not found"}

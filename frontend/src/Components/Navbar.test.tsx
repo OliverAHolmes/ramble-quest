@@ -3,16 +3,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Navbar from "./Navbar";
-// import { rootReducer } from "../redux/store";
 import { Provider } from "react-redux";
 import panelsReducer, {
   setUploadGeoJsonVisable,
   setLayerListVisable,
 } from "../redux/panelsSlice";
-
-// const store = configureStore({
-//   reducer: rootReducer,
-// });
 
 describe("<Navbar />", () => {
   let store: any;
@@ -38,11 +33,10 @@ describe("<Navbar />", () => {
 
     // Open the menu
     userEvent.click(menuButton);
-    // Check the state changes or menu appearance (Based on what `isOpen` actually does)
 
     // Close the menu
     userEvent.click(menuButton);
-    // Check the state changes or menu disappearance
+
   });
 
   it("should dispatch setUploadGeoJsonVisable when Upload button is clicked", () => {
@@ -60,7 +54,7 @@ describe("<Navbar />", () => {
   });
 
   it("should dispatch setLayerListVisable when Layers button is clicked", () => {
-    const layerListVisible = false; // mock the initial state value from Redux
+    const layerListVisible = false;
     store.getState = jest.fn().mockReturnValue({
       panels: {
         layerList: {

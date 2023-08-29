@@ -33,7 +33,6 @@ const Map: React.FC = () => {
   const dispatch = useDispatch();
   useFetchLayers(dispatch);
 
-  // Add and Remove layers as needed
   useEffect(() => {
     if (!isMapLoaded) return;
 

@@ -86,7 +86,6 @@ describe("<DeleteModal />", () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledTimes(1);
-      // Add a check to make sure `setError` has been called with the correct argument
     });
   });
 

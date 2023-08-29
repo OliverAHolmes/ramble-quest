@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import NoLayers from "./NoLayers"; // Adjust the import based on your folder structure
+import NoLayers from "./NoLayers";
 
 describe("<NoLayers />", () => {
   it("renders the component and displays the expected text", () => {

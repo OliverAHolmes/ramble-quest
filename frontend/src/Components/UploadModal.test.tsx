@@ -25,7 +25,7 @@ describe("UploadModal", () => {
     store = mockStore({
       panels: {
         uploadGeoJson: {
-          visible: true, // set this to true
+          visible: true,
         },
       },
     });
@@ -42,7 +42,7 @@ describe("UploadModal", () => {
     customRender();
     const cancelButton = screen.getByText(/Cancel/i);
     userEvent.click(cancelButton);
-    expect(store.dispatch).toHaveBeenCalledWith(expect.anything()); // replace with your expected action
+    expect(store.dispatch).toHaveBeenCalledWith(expect.anything());
   });
 
   it("displays UploadError when an error occurs", async () => {
