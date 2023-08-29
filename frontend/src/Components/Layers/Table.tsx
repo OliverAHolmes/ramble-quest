@@ -1,27 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../../redux/store";
-import { updateSelectedLayerId, type Layer } from "../../redux/layersListSlice";
-import { setDeleteLayerVisable } from "../../redux/panelsSlice";
+import { updateSelectedLayerId } from "../../redux/layersListSlice";
+import { setDeleteLayerVisible } from "../../redux/panelsSlice";
 
-const LayersTable = () => {
+const Table = () => {
   const dispatch = useDispatch();
-  const layers = useSelector((state: RootState) => state.layers.layers);
-  const [tableData, setTableData] = useState<Layer[]>([]);
+  const layers = useSelector((state: RootState) => state.layers.list);
   const selectedLayerId = useSelector(
     (state: RootState) => state.layers.selectedLayerId,
   );
-
-  useEffect(() => {
-    setTableData(layers);
-  }, [layers]);
 
   const handleRowClick = (id: number) => {
     dispatch(updateSelectedLayerId(id));
   };
 
   const handleDelete = (id: number) => {
-    dispatch(setDeleteLayerVisable({ visible: true, id }));
+    dispatch(setDeleteLayerVisible({ visible: true, id }));
   };
 
   return (
@@ -62,7 +57,7 @@ const LayersTable = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                  {tableData.map((row, index) => (
+                  {layers.map((row, index) => (
                     <tr
                       key={index}
                       className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -75,6 +70,7 @@ const LayersTable = () => {
                       >
                         <div className="inline-flex items-center gap-x-3">
                           <input
+                            data-testid={`radio-button-${row.id}`}
                             type="radio"
                             name="layer"
                             className="cursor-pointer"
@@ -92,7 +88,7 @@ const LayersTable = () => {
                         className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
                       >
                         <div className="inline-flex items-center gap-x-3">
-                          <span>{row.id}</span>
+                          {row.id}
                         </div>
                       </td>
                       <td
@@ -107,6 +103,7 @@ const LayersTable = () => {
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                         <button
+                          data-testid="delete-button"
                           onClick={() => {
                             handleDelete(row.id);
                           }}
@@ -134,4 +131,4 @@ const LayersTable = () => {
   );
 };
 
-export default LayersTable;
+export default Table;

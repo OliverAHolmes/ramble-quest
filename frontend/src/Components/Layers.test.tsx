@@ -37,7 +37,7 @@ describe("<Layers />", () => {
     mockUseSelector.mockImplementation((selector) => {
       return selector({
         panels: { layerList: { visible: true } },
-        layers: { layers: [] },
+        layers: { list: [] },
       });
     });
     const { getByTestId } = render(<Layers />);
@@ -48,7 +48,7 @@ describe("<Layers />", () => {
     mockUseSelector.mockImplementation((selector) => {
       return selector({
         panels: { layerList: { visible: true } },
-        layers: { layers: [{}] },
+        layers: { list: [{}] },
       });
     });
     const { getByTestId } = render(<Layers />);
@@ -59,7 +59,7 @@ describe("<Layers />", () => {
     mockUseSelector.mockImplementation((selector) => {
       return selector({
         panels: { layerList: { visible: false } },
-        layers: { layers: [] },
+        layers: { list: [] },
       });
     });
     const { queryByTestId } = render(<Layers />);

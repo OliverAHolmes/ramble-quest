@@ -35,7 +35,7 @@ describe("<DeleteModal />", () => {
     const { getByText } = render(<DeleteModal />);
     fireEvent.click(getByText("Cancel"));
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: "panels/setDeleteLayerVisable",
+      type: "panels/setDeleteLayerVisible",
       payload: { visible: false, id: undefined },
     });
   });
@@ -55,7 +55,7 @@ describe("<DeleteModal />", () => {
 
       // Check the first call to mockDispatch
       expect(mockDispatch).toHaveBeenNthCalledWith(1, {
-        type: "panels/setDeleteLayerVisable",
+        type: "panels/setDeleteLayerVisible",
         payload: { visible: false, id: undefined },
       });
 

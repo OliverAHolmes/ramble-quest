@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { setDeleteLayerVisable } from "../redux/panelsSlice";
+import { setDeleteLayerVisible } from "../redux/panelsSlice";
 import {
   updateLayerList,
   updateSelectedLayerId,
@@ -25,7 +25,7 @@ const DeleteModal = () => {
   }, [panelVisable]);
 
   const handleCancelButtClick = () => {
-    dispatch(setDeleteLayerVisable({ visible: false, id: undefined }));
+    dispatch(setDeleteLayerVisible({ visible: false, id: undefined }));
   };
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const DeleteModal = () => {
           });
 
         setError(null);
-        dispatch(setDeleteLayerVisable({ visible: false, id: undefined }));
+        dispatch(setDeleteLayerVisible({ visible: false, id: undefined }));
       } else {
         const errorData = await response.json();
         setError(errorData.detail ?? "Failed to delete layer.");

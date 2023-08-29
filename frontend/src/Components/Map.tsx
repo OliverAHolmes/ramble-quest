@@ -9,17 +9,7 @@ import "./Map.css";
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic3RhY2tzb25kYXZlIiwiYSI6ImNsbDAwOXU4ejA3dGkzZW82NGRveWpiMTQifQ.4YsujGfX1Nl7NbQgkAi90g";
 
-const Map: React.FC = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [mapLayers, setMapLayers] = useState<Set<string>>(new Set());
-  const layers = useSelector((state: RootState) => state.layers.layers);
-  const slecetedLayerId = useSelector(
-    (state: RootState) => state.layers.selectedLayerId,
-  );
-
-  const dispatch = useDispatch();
+const useFetchLayers = (dispatch: React.Dispatch<any>): void => {
   useEffect(() => {
     // Dispatch the fetchLayers action when the component mounts
     fetch("/features")
@@ -28,6 +18,20 @@ const Map: React.FC = () => {
         dispatch(updateLayerList(data));
       });
   }, [dispatch]);
+};
+
+const Map: React.FC = () => {
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [mapLayers, setMapLayers] = useState<Set<string>>(new Set());
+  const layers = useSelector((state: RootState) => state.layers.list);
+  const slecetedLayerId = useSelector(
+    (state: RootState) => state.layers.selectedLayerId,
+  );
+
+  const dispatch = useDispatch();
+  useFetchLayers(dispatch);
 
   // Add and Remove layers as needed
   useEffect(() => {

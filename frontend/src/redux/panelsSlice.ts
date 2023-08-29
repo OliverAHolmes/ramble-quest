@@ -39,7 +39,7 @@ const panelsSlice = createSlice({
     setUploadGeoJsonVisable: (state, action: PayloadAction<boolean>) => {
       state.uploadGeoJson.visible = action.payload;
     },
-    setDeleteLayerVisable: (state, action: PayloadAction<DeleteLayerState>) => {
+    setDeleteLayerVisible: (state, action: PayloadAction<DeleteLayerState>) => {
       state.deleteLayer = action.payload;
     },
     setLayerListVisable: (state, action: PayloadAction<boolean>) => {
@@ -55,7 +55,7 @@ export const {
   setUploadGeoJsonVisable,
   setLayerListVisable,
   setLayerAttributeTableVisable,
-  setDeleteLayerVisable,
+  setDeleteLayerVisible,
 } = panelsSlice.actions;
 
 export default panelsSlice.reducer;
