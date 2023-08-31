@@ -15,8 +15,11 @@ test:
 	rm -f test.db
 
 test-coverage:
+	docker-compose up -d
+	sleep 4
+	./wait-for-postgres.sh
 	export ENV=testing && pytest tests -x -vv --cov=. --cov-report=term-missing
-	rm -f test.db
+	docker-compose down
 
 install:
 	pipenv install --dev
