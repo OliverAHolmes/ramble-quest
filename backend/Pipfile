@@ -10,7 +10,9 @@ uvicorn = "*"
 pydantic = "*"
 python-multipart = "*"
 pylint = "*"
+geoalchemy2 = "*"
 psycopg2-binary = "*"
+shapely = "*"
 
 [dev-packages]
 black = "*"

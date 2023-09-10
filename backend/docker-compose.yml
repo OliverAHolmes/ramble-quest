@@ -1,8 +1,18 @@
 version: "3.8"
 
 services:
-  postgres:
-    image: postgis/postgis:latest
+  postgres-dev:
+    image: postgis/postgis:15-3.4
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: devdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+  postgres-test:
+    image: postgis/postgis:15-3.4
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -13,4 +23,6 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
-      - 5432:5432
+      - 5433:5432
+volumes:
+  pgdata:
