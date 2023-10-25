@@ -6,6 +6,7 @@ from aws_cdk import (
     CfnOutput,
     Stage,
     aws_s3 as s3,
+    aws_iam as iam,
 )
 from constructs import Construct
 import datetime
@@ -22,6 +23,11 @@ class RambleApiStack(Stack):
 
         super().__init__(scope, id, **kwargs)
 
+        lambda_role = iam.Role(
+            self, "AbcEcsTaskRunnerRole",
+            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com")
+        )
+
         # Create the Lambda function, use Existing LambdaCode Bucket
         api_lambda = _lambda.Function(
             self,
@@ -30,6 +36,8 @@ class RambleApiStack(Stack):
                 s3.Bucket.from_bucket_name(self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"),
                 key="lambda_package.zip",
             ),
+            function_name="abc-ecs-task-runner",
+            role=lambda_role,
             runtime=_lambda.Runtime.PYTHON_3_11,
             handler="lambda_handler.lambda_handler",
             timeout=Duration.seconds(15),
