@@ -36,7 +36,7 @@ class RambleApiStack(Stack):
                 s3.Bucket.from_bucket_name(self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"),
                 key="lambda_package.zip",
             ),
-            function_name="abc-ecs-task-runner",
+            function_name=f"abc-ecs-task-runner-{stage_name}",
             role=lambda_role,
             runtime=_lambda.Runtime.PYTHON_3_11,
             handler="lambda_handler.lambda_handler",
