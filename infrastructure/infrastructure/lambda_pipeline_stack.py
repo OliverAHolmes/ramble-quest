@@ -53,7 +53,6 @@ class LambdaPipelineStack(Stack):
                 ],
                 primary_output_directory="infrastructure/cdk.out",
             ),
-            self_mutation=False,
             docker_enabled_for_synth=True,
             docker_enabled_for_self_mutation=True,
         )
@@ -82,7 +81,7 @@ class LambdaPipelineStack(Stack):
         # Add the ShellStep as a pre-step to your app stage
         test_stage = pipeline.add_stage(RambleApiAppStage(self, "FastAPIAppTest", stage_name="test"))
 
-        test_stage.add_post(
-            pipelines.ManualApprovalStep("ManualApproval")
+        test_stage.add_pre(
+            pipelines.ManualApprovalStep("PromoteToTest")
         )
 
