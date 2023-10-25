@@ -36,7 +36,6 @@ describe("<Navbar />", () => {
 
     // Close the menu
     userEvent.click(menuButton);
-
   });
 
   it("should dispatch setUploadGeoJsonVisable when Upload button is clicked", () => {

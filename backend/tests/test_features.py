@@ -133,3 +133,12 @@ def test_delete_feature_by_id_not_found():
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"detail": "Feature not found"}
+
+def test_delete_feature_by_id_not_found_two():
+    # Test a feature ID that does not exist
+    response = client.delete(
+        "/features/delete/9999"
+    )  # Assuming ID 9999 does not exist in the DB
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {"detail": "Feature not found"}

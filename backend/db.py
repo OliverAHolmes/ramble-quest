@@ -9,7 +9,7 @@ from config import settings
 if settings.ENV == "testing":
     SQLALCHEMY_DATABASE_URL = "postgresql://user:password@localhost:5433/testdb"
 else:
-    SQLALCHEMY_DATABASE_URL = f"postgresql://user:password@localhost:5432/devdb"
+    SQLALCHEMY_DATABASE_URL = "postgresql://user:password@localhost:5432/devdb"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
