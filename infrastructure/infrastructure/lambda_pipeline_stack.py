@@ -59,7 +59,7 @@ class LambdaPipelineStack(Stack):
         )
 
         # Add a new stage to the pipeline
-        app_stage = pipeline.add_stage(
+        dev_stage = pipeline.add_stage(
             RambleApiAppStage(self, "FastAPIAppDev", stage_name="dev")
         )
 
@@ -77,4 +77,12 @@ class LambdaPipelineStack(Stack):
         )
 
         # Add the ShellStep as a pre-step to your app stage
-        app_stage.add_pre(create_lambda_zip_step)
+        dev_stage.add_pre(create_lambda_zip_step)
+
+        # Add the ShellStep as a pre-step to your app stage
+        test_stage = pipeline.add_stage(RambleApiAppStage(self, "FastAPIAppTest", stage_name="test"))
+
+        test_stage.add_post(
+            pipelines.ManualApprovalStep("ManualApproval")
+        )
+
