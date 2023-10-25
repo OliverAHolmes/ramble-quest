@@ -15,8 +15,8 @@ class LambdaPipelineStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.deploy_bucket = s3.Bucket(self, "DeployBucket", bucket_name='cdk-deploy')
-        self.deploy_bucket.policy.apply_removal_policy(RemovalPolicy.DESTROY)
+        deploy_bucket = s3.Bucket(self, "DeployBucket", bucket_name="cdk-deploy-ramble")
+        deploy_bucket.apply_removal_policy(RemovalPolicy.DESTROY)
 
         pipeline = pipelines.CodePipeline(
             self,
@@ -24,17 +24,17 @@ class LambdaPipelineStack(Stack):
             synth=pipelines.ShellStep(
                 "Synth",
                 input=pipelines.CodePipelineSource.connection(
-                    connection_arn="your-connection-arn",
-                    branch="branch-name",
-                    repo_string="owner/repo-name",
+                    connection_arn="arn:aws:codestar-connections:ap-southeast-2:208792096778:connection/2419a415-8a53-4a39-a416-e64d3273b380",
+                    branch="main",
+                    repo_string="OliverAHolmes/ramble-quest",
                 ),
                 commands=[
-                    "cd cdk",
+                    "cd infrastructure",
                     "npm install -g aws-cdk",  # Installs the cdk cli on Codebuild
                     "pip install -r requirements.txt",  # Instructs Codebuild to install required packages
                     "npx cdk synth",
                 ],
-                primary_output_directory="cdk/cdk.out",
+                primary_output_directory="infrastructure/cdk.out",
             ),
             docker_enabled_for_synth=True,
             docker_enabled_for_self_mutation=True,
@@ -45,16 +45,13 @@ class LambdaPipelineStack(Stack):
             RambleApiAppStage(self, "FastAPIAppDev", stage_name="dev")
         )
 
-        # Add a pre-step to the stage to create the zip for deployment.
-
-
         app_stage.add_pre(
             pipelines.ShellStep(
                 "CreateLambdaZip",
                 commands=[
                     "cd ../backend",
                     "zip -r lambda_package.zip .",
-                    f"aws s3 cp lambda_package.zip s3://{self.deploy_bucket.bucket_name}/ramble"
+                    f"aws s3 cp lambda_package.zip s3://{deploy_bucket.bucket_name}",
                 ],
             )
         )
