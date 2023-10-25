@@ -15,17 +15,26 @@ Imports:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from db import create_db
-from routes import router
+# from db import create_db
+# from routes import router
 
-create_db()
+# create_db()
 
 app = FastAPI()
-app.include_router(router)
+# app.include_router(router)
+
+@app.get("/")
+async def read_root():
+    """Root endpoint for the FastAPI application.
+
+    Returns:
+        dict: A dictionary containing a welcome message.
+    """
+    return {"message": "Welcome to the Ramble Quest API."}
 
 # CORS configuration
 origins = [
-    "http://localhost:3000",  # Adjust this as needed
+    "*",  # Adjust this as needed
 ]
 
 app.add_middleware(
