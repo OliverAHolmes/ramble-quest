@@ -4,6 +4,8 @@ from aws_cdk import (
     Stack,
     pipelines,
     aws_s3 as s3,
+    aws_iam as iam,
+    aws_codebuild as codebuild,
     RemovalPolicy,
 )
 from constructs import Construct
@@ -17,6 +19,19 @@ class LambdaPipelineStack(Stack):
 
         deploy_bucket = s3.Bucket(self, "DeployBucket", bucket_name="cdk-deploy-ramble")
         deploy_bucket.apply_removal_policy(RemovalPolicy.DESTROY)
+
+        code_pipeline_role = iam.Role(
+            self,
+            "CodePipelineRole",
+            assumed_by=iam.ServicePrincipal("codepipeline.amazonaws.com"),
+        )
+
+        code_pipeline_role.add_to_policy(
+            iam.PolicyStatement(
+                actions=["s3:GetObject", "s3:PutObject"],
+                resources=[deploy_bucket.bucket_arn + "/*"],
+            )
+        )
 
         pipeline = pipelines.CodePipeline(
             self,
@@ -39,6 +54,7 @@ class LambdaPipelineStack(Stack):
             # self_mutation=False,
             docker_enabled_for_synth=True,
             docker_enabled_for_self_mutation=True,
+            role=code_pipeline_role,
         )
 
         # Add a new stage to the pipeline
