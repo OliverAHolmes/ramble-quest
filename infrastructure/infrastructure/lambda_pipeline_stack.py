@@ -23,7 +23,7 @@ class LambdaPipelineStack(Stack):
         code_pipeline_role = iam.Role(
             self,
             "CodePipelineRole",
-            assumed_by=iam.ServicePrincipal("codepipeline.amazonaws.com"),
+            assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
         )
 
         code_pipeline_role.add_to_policy(
