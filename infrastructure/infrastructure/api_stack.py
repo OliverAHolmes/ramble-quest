@@ -21,7 +21,7 @@ class RambleApiStack(Stack):
 
         super().__init__(scope, id, **kwargs)
 
-        # Create the Lambda function
+        # Create the Lambda function, use Existing LambdaCode Bucket
         api_lambda = _lambda.Function(
             self,
             f"RambleApiApiLambda-{stage_name}",
