@@ -26,7 +26,7 @@ class RambleApiStack(Stack):
             self,
             f"RambleApiApiLambda-{stage_name}",
             code=_lambda.Code.from_bucket(
-                s3.Bucket(self, "LambdaCodeBucket", bucket_name="cdk-deploy-ramble"),
+                s3.Bucket.from_bucket_name(self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"),
                 key="lambda_package.zip",
             ),
             runtime=_lambda.Runtime.PYTHON_3_11,

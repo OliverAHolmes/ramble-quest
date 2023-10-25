@@ -69,6 +69,9 @@ class LambdaPipelineStack(Stack):
             input=repo,
             commands=[
                 "cd ./backend",
+                "bash",
+                "-c",
+                "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output",
                 "zip -r lambda_package.zip .",
                 f"aws s3 cp lambda_package.zip s3://{deploy_bucket.bucket_name}",
             ],
