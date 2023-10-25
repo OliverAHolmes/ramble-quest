@@ -33,16 +33,18 @@ class LambdaPipelineStack(Stack):
             )
         )
 
+        repo = pipelines.CodePipelineSource.connection(
+            connection_arn="arn:aws:codestar-connections:ap-southeast-2:208792096778:connection/2419a415-8a53-4a39-a416-e64d3273b380",
+            branch="main",
+            repo_string="OliverAHolmes/ramble-quest",
+        )
+
         pipeline = pipelines.CodePipeline(
             self,
             "Pipeline",
             synth=pipelines.ShellStep(
                 "Synth",
-                input=pipelines.CodePipelineSource.connection(
-                    connection_arn="arn:aws:codestar-connections:ap-southeast-2:208792096778:connection/2419a415-8a53-4a39-a416-e64d3273b380",
-                    branch="main",
-                    repo_string="OliverAHolmes/ramble-quest",
-                ),
+                input=repo,
                 commands=[
                     "cd infrastructure",
                     "npm install -g aws-cdk",  # Installs the cdk cli on Codebuild
@@ -64,11 +66,7 @@ class LambdaPipelineStack(Stack):
         # Use the CodeBuild project in the CodeBuildStep
         create_lambda_zip_step = pipelines.CodeBuildStep(
             "CreateLambdaZip",
-            input=pipelines.CodePipelineSource.connection(
-                connection_arn="arn:aws:codestar-connections:ap-southeast-2:208792096778:connection/2419a415-8a53-4a39-a416-e64d3273b380",
-                branch="main",
-                repo_string="OliverAHolmes/ramble-quest",
-            ),
+            input=repo,
             commands=[
                 "cd ./backend",
                 "zip -r lambda_package.zip .",
@@ -76,3 +74,6 @@ class LambdaPipelineStack(Stack):
             ],
             role=code_build_role,
         )
+
+        # Add the ShellStep as a pre-step to your app stage
+        app_stage.add_pre(create_lambda_zip_step)
