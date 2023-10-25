@@ -13,7 +13,6 @@ pylint = "*"
 geoalchemy2 = "*"
 psycopg2-binary = "*"
 shapely = "*"
-constructs = "*"
 mangum = "*"
 
 [dev-packages]
@@ -22,6 +21,7 @@ httpx = "*"
 pytest = "*"
 pytest-cov = "*"
 aws-cdk-lib = "*"
+constructs = "*"
 
 [requires]
 python_version = "3.11"
