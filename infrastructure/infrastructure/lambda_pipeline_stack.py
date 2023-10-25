@@ -36,7 +36,7 @@ class LambdaPipelineStack(Stack):
                 ],
                 primary_output_directory="infrastructure/cdk.out",
             ),
-            self_mutation=False,
+            # self_mutation=False,
             docker_enabled_for_synth=True,
             docker_enabled_for_self_mutation=True,
         )
