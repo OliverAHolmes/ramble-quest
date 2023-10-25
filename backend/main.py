@@ -30,7 +30,7 @@ async def read_root():
     Returns:
         dict: A dictionary containing a welcome message.
     """
-    return {"message": "Welcome to the Ramble Quest API."}
+    return {"message": "Welcome to the Ramble Quest API!"}
 
 # CORS configuration
 origins = [

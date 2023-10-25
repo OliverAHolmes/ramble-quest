@@ -24,7 +24,7 @@ class RambleApiStack(Stack):
         # Create the Lambda function, use Existing LambdaCode Bucket
         api_lambda = _lambda.Function(
             self,
-            f"RambleApiApiLambda-{stage_name}",
+            f"RambleApiLambda-{stage_name}",
             code=_lambda.Code.from_bucket(
                 s3.Bucket.from_bucket_name(self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"),
                 key="lambda_package.zip",
