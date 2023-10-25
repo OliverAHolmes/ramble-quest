@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_s3 as s3,
 )
 from constructs import Construct
+import datetime
 
 
 class RambleApiStack(Stack):
@@ -32,6 +33,7 @@ class RambleApiStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_11,
             handler="lambda_handler.lambda_handler",
             timeout=Duration.seconds(15),
+            description=f"Deployed on {datetime.datetime.now()}"
         )
 
         # Create the API Gateway
