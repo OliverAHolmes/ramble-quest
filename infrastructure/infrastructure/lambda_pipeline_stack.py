@@ -36,6 +36,7 @@ class LambdaPipelineStack(Stack):
                 ],
                 primary_output_directory="infrastructure/cdk.out",
             ),
+            self_mutation=False,
             docker_enabled_for_synth=True,
             docker_enabled_for_self_mutation=True,
         )
@@ -49,7 +50,7 @@ class LambdaPipelineStack(Stack):
             pipelines.ShellStep(
                 "CreateLambdaZip",
                 commands=[
-                    "cd ../backend",
+                    "cd ./backend",
                     "zip -r lambda_package.zip .",
                     f"aws s3 cp lambda_package.zip s3://{deploy_bucket.bucket_name}",
                 ],
