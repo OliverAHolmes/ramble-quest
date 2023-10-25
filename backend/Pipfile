@@ -13,12 +13,15 @@ pylint = "*"
 geoalchemy2 = "*"
 psycopg2-binary = "*"
 shapely = "*"
+constructs = "*"
+mangum = "*"
 
 [dev-packages]
 black = "*"
 httpx = "*"
 pytest = "*"
 pytest-cov = "*"
+aws-cdk-lib = "*"
 
 [requires]
 python_version = "3.11"

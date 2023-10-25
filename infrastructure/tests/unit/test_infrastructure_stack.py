@@ -1,6 +1,6 @@
 import aws_cdk as core
 import aws_cdk.assertions as assertions
-from infrastructure.infrastructure_stack import InfrastructureStack
+from infrastructure.infrastructure.lambda_pipeline_stack import InfrastructureStack
 
 
 def test_sqs_queue_created():

@@ -2,10 +2,12 @@
 
 import aws_cdk as cdk
 
-from infrastructure.infrastructure_stack import InfrastructureStack
+from infrastructure.lambda_pipeline_stack import LambdaPipelineStack
+# from lambda_api_stack import RambleLambdaApiStack
 
 
 app = cdk.App()
-InfrastructureStack(app, "infrastructure")
+LambdaPipelineStack(app, "LambdaPipelineStack", env=cdk.Environment(region="ap-southeast-2"))
+# RambleLambdaApiStack(app, "RambleLambdaApiStack")
 
 app.synth()
