@@ -16,7 +16,8 @@ To create an FastAPI that allows users to upload a GeoJson file and then view it
 
 * FastAPI
 * SQLAlchemy
-* SQLite
+* PostGIS
+* Docker
 * React implemented in TypeScript
 * MapBox GL JS
 * Tailwind
