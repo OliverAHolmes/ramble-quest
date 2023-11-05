@@ -7,6 +7,9 @@ from aws_cdk import (
     Stage,
     aws_s3 as s3,
     aws_iam as iam,
+    aws_acm as acm,
+    aws_route53 as route53,
+    aws_route53_targets as targets,
 )
 from constructs import Construct
 import datetime
@@ -42,12 +45,48 @@ class RambleApiStack(Stack):
             },
         )
 
+        certificate = acm.Certificate.from_certificate_arn(
+            self,
+            "Certificate",
+            certificate_arn="arn:aws:acm:us-east-1:055145806946:certificate/c64f4ad7-faf5-4e00-b804-9307908a4cb1",
+        )
+
+        hosted_zone_id = "Z07818983TUCZ3VYMR5DD"
+        domain_name = "ramble.quest"
+
+        hosted_zone = route53.HostedZone.from_hosted_zone_attributes(
+            self, "HostedZone", hosted_zone_id=hosted_zone_id, zone_name=domain_name
+        )
+
+        domain_name_ext = "api"
+        domain_name_with_ext = f"{domain_name_ext}." + domain_name
+
         # Create the API Gateway
         api = apigateway.LambdaRestApi(
             self,
             f"RambleApiApiGateway-{stage_name}",
             handler=api_lambda,
             deploy_options={"stage_name": stage_name},
+            domain_name=apigateway.DomainNameOptions(
+                domain_name=domain_name_with_ext,
+                certificate=certificate,
+                security_policy=apigateway.SecurityPolicy.TLS_1_2,
+                endpoint_type=apigateway.EndpointType.EDGE,
+            ),
+            deploy_options={"stage_name": stage_name},
+            default_cors_preflight_options=apigateway.CorsOptions(
+                allow_origins=apigateway.Cors.ALL_ORIGINS,
+                allow_methods=apigateway.Cors.ALL_METHODS,
+                allow_headers=["*"],
+            ),
+        )
+
+        route53.ARecord(
+            self,
+            "ApiRecord",
+            record_name=domain_name_ext,
+            zone=hosted_zone,
+            target=route53.RecordTarget.from_alias(targets.ApiGateway(api)),
         )
 
         # Export the URL of the API Gateway endpoint
