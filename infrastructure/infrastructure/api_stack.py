@@ -31,7 +31,9 @@ class RambleApiStack(Stack):
             self,
             f"RambleApiLambda-{stage_name}",
             code=_lambda.Code.from_bucket(
-                s3.Bucket.from_bucket_name(self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"),
+                s3.Bucket.from_bucket_name(
+                    self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"
+                ),
                 key="lambda_package.zip",
             ),
             function_name=f"RambleApiLambda-{stage_name}",
@@ -48,7 +50,7 @@ class RambleApiStack(Stack):
         certificate = acm.Certificate.from_certificate_arn(
             self,
             "Certificate",
-            certificate_arn="arn:aws:acm:us-east-1:055145806946:certificate/c64f4ad7-faf5-4e00-b804-9307908a4cb1",
+            certificate_arn="arn:aws:acm:us-east-1:208792096778:certificate/9d21131d-c713-425e-b024-cba5f2c72ec0",
         )
 
         hosted_zone_id = "Z07818983TUCZ3VYMR5DD"
