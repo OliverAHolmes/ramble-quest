@@ -7,7 +7,7 @@ from aws_cdk import (
     Stage,
     aws_s3 as s3,
     aws_iam as iam,
-    aws_acm as acm,
+    aws_certificatemanager as acm,
     aws_route53 as route53,
     aws_route53_targets as targets,
 )
