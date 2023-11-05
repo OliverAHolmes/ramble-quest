@@ -1,0 +1,57 @@
+# Use Ubuntu 20.04 as base image
+FROM ubuntu:20.04 AS build
+
+# Update and install some basic utilities
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    software-properties-common
+
+# Add the deadsnakes PPA to get newer versions of Python
+RUN add-apt-repository ppa:deadsnakes/ppa -y
+
+# Install Python3 and GDAL
+RUN apt-get update && apt-get install -y \
+    python3.9 \
+    python3.9-dev \
+    python3.9-distutils \
+    python3-pip \
+    libgdal-dev \
+    gdal-bin \
+    python3-gdal
+
+# Optional: Set Python3.9 as the default version
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
+
+# Link the GDAL library to the location where Python expects it to be
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+RUN pip3 install GDAL==`gdal-config --version`
+
+# Install the AWS Lambda Runtime Interface Client
+RUN pip3 install awslambdaric
+
+# Copy your lambda function and any other required files (assuming your function is named lambda_function.py)
+COPY . /var/task/
+
+# Setting up the final image
+FROM ubuntu:20.04
+
+# Install necessary runtime dependencies
+RUN apt-get update && apt-get install -y libgdal26
+
+# Copy artifacts from build image
+COPY --from=build /usr/local /usr/local
+COPY --from=build /var/task /var/task
+COPY --from=build /usr/bin /usr/bin
+COPY --from=build /usr/lib /usr/lib
+COPY --from=build /usr/include /usr/include
+
+# Set necessary environment variables
+ENV AWS_LAMBDA_RUNTIME_API="provided"
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+
+# Set the working directory
+WORKDIR /var/task
+
+# Define the entry point
+ENTRYPOINT [ "python3", "-m", "awslambdaric" ]
+CMD [ "lambda_handler.lambda_handler" ]

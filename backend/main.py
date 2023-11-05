@@ -12,8 +12,26 @@ Imports:
     create_db: Function to initialize the database.
     router: FastAPI router containing all application routes.
 """
-from fastapi import FastAPI
+import os
+# GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
+# GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
+
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+# from osgeo import gdal
+# import io
+# from starlette.responses import StreamingResponse
+# import services.tiles as tiles
+
+from auth.JWTBearer import JWTBearer
+from auth.auth import get_jwks
+
+from routers import (
+    home,
+    health,
+)
+
+auth = JWTBearer(get_jwks())
 
 # from db import create_db
 # from routes import router
@@ -23,14 +41,61 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 # app.include_router(router)
 
-@app.get("/")
-async def read_root():
-    """Root endpoint for the FastAPI application.
+app.include_router(health.router, tags=["healthcheck"])
+app.include_router(home.router, dependencies=[Depends(auth)], tags=["home"])
 
-    Returns:
-        dict: A dictionary containing a welcome message.
-    """
-    return {"message": "Welcome to the Ramble Quest API!!!"}
+
+# @app.get("/")
+# async def read_root():
+#     """Root endpoint for the FastAPI application.
+
+#     Returns:
+#         dict: A dictionary containing a welcome message.
+#     """
+#     return {"message": "Welcome to the Ramble Quest API!!!"}
+
+
+# @app.get("/gdal-version")
+# def get_gdal_version():
+#     return {"gdal_version": gdal.__version__}
+
+# @app.get("/{path:path}")
+# async def tile(path: str):
+#     req_para = path.split("/")
+#     if len(req_para) < 4:
+#         raise HTTPException(status_code=400, detail="Invalid path format")
+
+#     layer_name = req_para[0]
+#     layer_zoom = req_para[1]
+#     layer_row = req_para[2]
+#     layer_col = req_para[3]
+
+#     return_image = tiles.return_tile(
+#         layer_name, int(layer_row), int(layer_col), int(layer_zoom)
+#     )
+
+#     if return_image.mode in ("RGBA", "P"):
+#         format = "png"
+#     else:
+#         return_image = return_image.convert("RGB")
+#         format = "jpeg"
+
+#     byte_io = io.BytesIO()
+#     return_image.save("test.png", format=format.upper())
+#     return_image.save(byte_io, format=format.upper())
+#     byte_io.seek(0)  # Reset the pointer to the beginning of the stream.
+
+#     headers = {
+#         "Content-Length": str(byte_io.getbuffer().nbytes),
+#         "Content-Type": f"image/{format}",
+#     }
+
+#     return StreamingResponse(byte_io, headers=headers, media_type=f"image/{format}")
+
+
+@app.get("/favicon.ico")
+def favicon():
+    return {}
 
 # CORS configuration
 origins = [

@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: FastAPI with AWS SAM
+
+Resources:
+  FastApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: my-fastapi-lambda:latest
+      Environment:
+        Variables:
+          ENDPOINT_URL: "s3.ap-southeast-2.wasabisys.com"
+          AWS_ACCESS_KEY_ID: "2P801GRW1DVXZXRTE6NY"
+          AWS_SECRET_ACCESS_KEY: "XuDYIb8rdl3fGH4SeKvBCyM7QDEzmebXukpqlNFK"
+          GDAL_DATA: "/opt/share/gdal"
+          PROJ_LIB: "/opt/share/proj"
+          GDAL_CONFIG: "/opt/bin/gdal-config" 
+          LD_LIBRARY_PATH: "/opt/lib:$LD_LIBRARY_PATH"
+          GDAL_LIBRARY_PATH: "/opt/lib/libgdal.so.32.3.6.4"
+          GEOS_LIBRARY_PATH: "/opt/lib/libgeos_c.so.1.16.1" 
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+      Timeout: 30

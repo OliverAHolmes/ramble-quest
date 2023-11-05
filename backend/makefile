@@ -10,8 +10,11 @@ clean-dev:
 	docker-compose rm -f postgres-dev
 	docker volume rm backend_pgdata
 
+generate_requirements_txt_dev:
+	pipenv requirements --dev  > requirements-dev.txt
+
 generate_requirements_txt:
-	pipenv requirements --dev  > requirements.txt
+	pipenv requirements > requirements.txt
 
 test:
 	docker-compose up -d postgres-test
