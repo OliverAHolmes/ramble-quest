@@ -35,7 +35,7 @@ class RambleApiStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_11,
             handler="lambda_handler.lambda_handler",
             timeout=Duration.seconds(15),
-            description=f"Deployed on {datetime.datetime.now()}"
+            description=f"Deployed on {datetime.datetime.now()}",
             environment={
                 "REGION_NAME": "ap-southeast-2",
                 "COGNITO_POOL_ID": "ap-southeast-2_RnWOCBotg",
