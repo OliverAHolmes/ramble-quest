@@ -38,7 +38,7 @@ auth = JWTBearer(get_jwks())
 
 # create_db()
 
-app = FastAPI()
+app = FastAPI(openapi_prefix="/dev/")
 # app.include_router(router)
 
 app.include_router(health.router, tags=["healthcheck"])
