@@ -73,7 +73,6 @@ class RambleApiStack(Stack):
                 security_policy=apigateway.SecurityPolicy.TLS_1_2,
                 endpoint_type=apigateway.EndpointType.EDGE,
             ),
-            deploy_options={"stage_name": stage_name},
             default_cors_preflight_options=apigateway.CorsOptions(
                 allow_origins=apigateway.Cors.ALL_ORIGINS,
                 allow_methods=apigateway.Cors.ALL_METHODS,
