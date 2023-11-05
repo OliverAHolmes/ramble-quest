@@ -38,7 +38,11 @@ auth = JWTBearer(get_jwks())
 
 # create_db()
 
-app = FastAPI()
+app = FastAPI(
+    title="Ramble Quest API",
+    description="API for the Ramble Quest game.",
+    version="0.1.0",
+)
 # app.include_router(router)
 
 app.include_router(health.router, tags=["healthcheck"])
