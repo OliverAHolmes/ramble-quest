@@ -36,6 +36,10 @@ class RambleApiStack(Stack):
             handler="lambda_handler.lambda_handler",
             timeout=Duration.seconds(15),
             description=f"Deployed on {datetime.datetime.now()}"
+            environment={
+                "REGION_NAME": "ap-southeast-2",
+                "COGNITO_POOL_ID": "ap-southeast-2_RnWOCBotg",
+            },
         )
 
         # Create the API Gateway
