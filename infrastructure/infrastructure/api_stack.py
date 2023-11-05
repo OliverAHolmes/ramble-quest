@@ -23,11 +23,6 @@ class RambleApiStack(Stack):
 
         super().__init__(scope, id, **kwargs)
 
-        lambda_role = iam.Role(
-            self, "AbcEcsTaskRunnerRole",
-            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com")
-        )
-
         # Create the Lambda function, use Existing LambdaCode Bucket
         api_lambda = _lambda.Function(
             self,
@@ -36,8 +31,7 @@ class RambleApiStack(Stack):
                 s3.Bucket.from_bucket_name(self, "ExistingLambdaCodeBucket", "cdk-deploy-ramble"),
                 key="lambda_package.zip",
             ),
-            function_name=f"abc-ecs-task-runner-{stage_name}",
-            role=lambda_role,
+            function_name=f"RambleApiLambda-{stage_name}",
             runtime=_lambda.Runtime.PYTHON_3_11,
             handler="lambda_handler.lambda_handler",
             timeout=Duration.seconds(15),
