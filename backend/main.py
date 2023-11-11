@@ -12,31 +12,25 @@ Imports:
     create_db: Function to initialize the database.
     router: FastAPI router containing all application routes.
 """
-import os
 # GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
 # GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 # from osgeo import gdal
 # import io
 # from starlette.responses import StreamingResponse
 # import services.tiles as tiles
 
-from auth.JWTBearer import JWTBearer
-from auth.auth import get_jwks
-
 from routers import (
     home,
     health,
+    features,
 )
 
-auth = JWTBearer(get_jwks())
+from db import create_db
 
-# from db import create_db
-# from routes import router
-
-# create_db()
+create_db()
 
 app = FastAPI(
     title="Ramble Quest API",
@@ -46,7 +40,8 @@ app = FastAPI(
 # app.include_router(router)
 
 app.include_router(health.router, tags=["healthcheck"])
-app.include_router(home.router, dependencies=[Depends(auth)], tags=["home"])
+app.include_router(home.router, tags=["home"])
+app.include_router(features.router, tags=["features"], prefix="/features")
 
 
 # @app.get("/")

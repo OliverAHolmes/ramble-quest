@@ -12,8 +12,10 @@ import json
 from fastapi import APIRouter, UploadFile, File, HTTPException, status
 from db import SessionLocal
 from models import Feature
+from shapely.geometry import shape, mapping
+from geoalchemy2.shape import to_shape
 
-router = APIRouter(prefix="/features")
+router = APIRouter()
 
 
 @router.post("/upload")
@@ -53,7 +55,7 @@ async def upload_geojson(file: UploadFile = File(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid GeoJSON, missing 'type' field.",
         )
-    if "features" not in geojson_dict and "geometry" not in geojson_dict :
+    if "features" not in geojson_dict and "geometry" not in geojson_dict:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid GeoJSON, missing 'geometry' or 'features' field.",
@@ -64,7 +66,15 @@ async def upload_geojson(file: UploadFile = File(...)):
     # Initialize database session
     session = SessionLocal()
 
-    db_feature = Feature(feature=geojson_dict, name=filename)
+    # Convert to WKT
+    wkt_geometry = shape(geojson_dict["geometry"]).wkt
+
+    db_feature = Feature(
+        feature=geojson_dict,
+        name=filename,
+        geometry=wkt_geometry,
+        properties=geojson_dict["properties"],
+    )
     session.add(db_feature)
 
     session.commit()
@@ -82,12 +92,35 @@ async def get_all_features():
     Retrieve all features stored in the database.
 
     Returns:
-        list: A list of all features.
+        list: A list of all features in GeoJSON format.
     """
-    session = SessionLocal()
-    db_features = session.query(Feature).all()
+    with SessionLocal() as session:
+        db_features = session.query(Feature).all()
     session.close()
-    return db_features
+
+    # Convert to GeoJSON
+    geojson_features = []
+    for db_feature in db_features:
+        # Convert PostGIS geometry to GeoJSON
+        geometry = mapping(to_shape(db_feature.geometry))
+
+        # Create a GeoJSON feature
+        feature = {
+            "type": "Feature",
+            "geometry": geometry,
+            "properties": db_feature.properties,
+        }
+
+        return_feature = {
+            "id": db_feature.id,
+            "created_at": db_feature.created_at,
+            "name": db_feature.name,
+            "feature": feature,
+        }
+
+        geojson_features.append(return_feature)
+
+    return geojson_features
 
 
 @router.get("/{feature_id}")
@@ -101,14 +134,29 @@ async def get_feature_by_id(feature_id: int):
     Returns:
         Feature: The feature object if found.
     """
-    session = SessionLocal()
-    db_feature = session.query(Feature).filter(Feature.id == feature_id).first()
-    session.close()
+    with SessionLocal() as session:
+        db_feature = session.query(Feature).filter(Feature.id == feature_id).first()
+        session.close()
 
     if db_feature is None:
         raise HTTPException(status_code=404, detail="Feature not found")
 
-    return db_feature
+    # Convert PostGIS geometry to GeoJSON
+    geometry = mapping(to_shape(db_feature.geometry))
+
+    # Create a GeoJSON feature
+    feature = {
+        "type": "Feature",
+        "geometry": geometry,
+        "properties": db_feature.properties,
+    }
+
+    return {
+        "id": db_feature.id,
+        "created_at": db_feature.created_at,
+        "name": db_feature.name,
+        "feature": feature,
+    }
 
 
 @router.delete("/delete/{feature_id}")
