@@ -1,0 +1,45 @@
+# Start with an official Ubuntu base image
+FROM ubuntu:latest
+
+# Set the working directory to /api
+WORKDIR /api
+
+# Set environment variables to non-interactive (this prevents some prompts)
+ENV DEBIAN_FRONTEND=non-interactive
+
+# Update and install some basic utilities
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+  software-properties-common
+
+# Add the deadsnakes PPA to get newer versions of Python
+RUN add-apt-repository ppa:deadsnakes/ppa -y
+
+# Install Python3 and GDAL
+RUN apt-get update && apt-get install -y \
+  python3.11 \
+  python3.11-dev \
+  python3.11-distutils \
+  python3-pip \
+  libgdal-dev \
+  gdal-bin
+
+# Link the GDAL library to the location where Python expects it to be
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+
+COPY requirements.txt /api
+
+# Install the Python requirements
+RUN pip install --no-cache-dir --upgrade -r /api/requirements.txt
+
+# Install GDAL Python bindings matching the system's GDAL version
+RUN pip install GDAL==$(gdal-config --version) --global-option=build_ext --global-option="-I/usr/include/gdal"
+
+# ENV AWS_ACCESS_KEY_ID=
+# ENV AWS_SECRET_ACCESS_KEY=
+# ENV AWS_SESSION_TOKEN=
+
+COPY . /api
+
+# Set the default command for the container to bash shell
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

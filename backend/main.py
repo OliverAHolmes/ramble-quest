@@ -15,7 +15,7 @@ Imports:
 # GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
 # GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI #, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 # from osgeo import gdal
 # import io
@@ -28,9 +28,9 @@ from routers import (
     features,
 )
 
-from db import create_db
+# from db import create_db
 
-create_db()
+# create_db()
 
 app = FastAPI(
     title="Ramble Quest API",

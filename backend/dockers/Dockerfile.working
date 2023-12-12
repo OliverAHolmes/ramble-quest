@@ -1,0 +1,46 @@
+FROM ghcr.io/lambgeo/lambda-gdal:3.8 as gdal
+
+FROM amazon/aws-lambda-python:3.11
+
+ENV PACKAGE_PREFIX=/var/task
+
+# Bring C libs from lambgeo/lambda-gdal image
+COPY --from=gdal /opt/lib/ ${PACKAGE_PREFIX}/lib/
+COPY --from=gdal /opt/include/ ${PACKAGE_PREFIX}/include/
+COPY --from=gdal /opt/share/ ${PACKAGE_PREFIX}/share/
+COPY --from=gdal /opt/bin/ ${PACKAGE_PREFIX}/bin/
+
+ENV \
+  GDAL_DATA=${PACKAGE_PREFIX}/share/gdal \
+  PROJ_LIB=${PACKAGE_PREFIX}/share/proj \
+  GDAL_CONFIG=${PACKAGE_PREFIX}/bin/gdal-config \
+  GEOS_CONFIG=${PACKAGE_PREFIX}/bin/geos-config \
+  PATH=${PACKAGE_PREFIX}/bin:$PATH \
+  LD_LIBRARY_PATH=${PACKAGE_PREFIX}/lib:$LD_LIBRARY_PATH \
+  LD_PRELOAD=${PACKAGE_PREFIX}/lib/libsqlite3.so \
+  CPLUS_INCLUDE_PATH=${PACKAGE_PREFIX}/include:$CPLUS_INCLUDE_PATH \
+  C_INCLUDE_PATH=${PACKAGE_PREFIX}/include:$C_INCLUDE_PATH \
+  GDAL_LIBRARY_PATH=${PACKAGE_PREFIX}/lib/libgdal.so \
+  GEOS_LIBRARY_PATH=${PACKAGE_PREFIX}/lib/libgeos.so
+
+RUN ls -la ${PACKAGE_PREFIX}/lib
+
+RUN yum install -y gcc-c++ gcc make cmake
+
+
+
+# Copy local files
+COPY requirements.txt ${PACKAGE_PREFIX}
+
+RUN pip install --upgrade pip
+RUN pip install numpy -t $PACKAGE_PREFIX  
+# Install the specified packages
+RUN pip install -r requirements.txt -t $PACKAGE_PREFIX
+ENV LDFLAGS="-L${PACKAGE_PREFIX}/lib"
+RUN pip install --no-cache-dir --force-reinstall GDAL[numpy]==$(gdal-config --version) -t $PACKAGE_PREFIX
+RUN python -c "from osgeo import gdal"
+RUN python -c "from osgeo import gdal_array"
+
+# Copy local files
+COPY . ${PACKAGE_PREFIX}
+CMD ["lambda_handler.lambda_handler"]
