@@ -1,4 +1,5 @@
 activate:
+	export PIPENV_VENV_IN_PROJECT=true
 	pipenv shell
 
 run:
@@ -18,19 +19,18 @@ generate_requirements_txt:
 
 test:
 	docker-compose up -d postgres-test
-	export ENV=testing && pytest tests -s -x -vv
-	docker-compose stop postgres-test
-	docker-compose rm -f postgres-test
+	export CURRENT_ENV=testing && pytest tests -s -x -vv
 
 test-coverage:
 	docker-compose up -d postgres-test
 	sleep 4
 	./wait-for-postgres.sh
-	export ENV=testing && pytest tests -x -vv --cov=. --cov-report=term-missing
+	export CURRENT_ENV=testing && pytest tests -x -vv --cov=. --cov-report=term-missing
 	docker-compose stop postgres-test
 	docker-compose rm -f postgres-test
 
 install:
+	export PIPENV_VENV_IN_PROJECT=true
 	pipenv install --dev
 
 format:

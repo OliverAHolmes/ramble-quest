@@ -20,6 +20,8 @@ python-jose = "*"
 requests = "*"
 cachetools = "*"
 boto3 = "*"
+pydantic-settings = "*"
+alembic = "*"
 
 [dev-packages]
 black = "*"
@@ -30,4 +32,4 @@ aws-cdk-lib = "*"
 constructs = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"

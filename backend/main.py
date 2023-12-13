@@ -28,9 +28,9 @@ from routers import (
     features,
 )
 
-# from db import create_db
+from db import create_db
 
-# create_db()
+create_db()
 
 app = FastAPI(
     title="Ramble Quest API",
