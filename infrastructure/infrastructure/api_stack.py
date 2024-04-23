@@ -50,10 +50,10 @@ class RambleApiStack(Stack):
         certificate = acm.Certificate.from_certificate_arn(
             self,
             "Certificate",
-            certificate_arn="arn:aws:acm:us-east-1:208792096778:certificate/9d21131d-c713-425e-b024-cba5f2c72ec0",
+            certificate_arn="ARN",
         )
 
-        hosted_zone_id = "Z07818983TUCZ3VYMR5DD"
+        hosted_zone_id = "HostedZoneID"
         domain_name = "ramble.quest"
 
         hosted_zone = route53.HostedZone.from_hosted_zone_attributes(
