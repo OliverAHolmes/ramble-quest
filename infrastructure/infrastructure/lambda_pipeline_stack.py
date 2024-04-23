@@ -34,7 +34,7 @@ class LambdaPipelineStack(Stack):
         )
 
         repo = pipelines.CodePipelineSource.connection(
-            connection_arn="arn:aws:codestar-connections:ap-southeast-2:208792096778:connection/2419a415-8a53-4a39-a416-e64d3273b380",
+            connection_arn="ARN",
             branch="main",
             repo_string="OliverAHolmes/ramble-quest",
         )
